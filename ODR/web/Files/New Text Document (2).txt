@@ -1,0 +1,49 @@
+Dear Mam,
+
+Here the doubts, I have written, Please clarify my doubts:
+
+d: 1
+Attack Eqn: 
+Defense Eqn: in which they place,
+And need all the Eqns. in which they updated for the project.
+
+d: 2
+Cognitive.cc is the only fully written code.
+Just Like, in which file, they added the written code,
+Just Like, in which location of the program, they update the written code.
+
+Please, Copy and put this in the MS Word file. So, only it will be clear for me to know.
+
+                     -  First write the file location in MS Word, in which they modified
+                     -  Then, Copy the program in MS Word, and highlight the text (in which they  modified)
+                       
+d: 3
+In Graph files, what is the link between values of graph and main program coding?
+
+There is one major coding to create '. dat' file values by main program coding.
+
+From which location, the code will be found. I need that coding to be highlighted, mam.
+
+This doubts are more important to know about the project, mam.
+
+Thanking you,
+
+
+
+
+Doubt 1 and 2 is answer will send on monday mam
+
+
+d-3:
+
+yes the link is occur for main code(Cognitive.cc) by using this file value graph file is generated.
+
+
+If you run the cognetive.cc then that file was generating the throughput,loss,delay,pdr value. In this value can be typed in data file.
+
+All the code in cognetive.cc(refer top to bottom all of the line was integrating to generate the value because in this file contain crete node , configure protocol and then getting the output like values of graph )
+
+
+
+
+	

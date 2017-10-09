@@ -1,0 +1,14 @@
+Painting Work,,12
+Pipeing Work,,15
+Painting Work,,12
+Roof Repair Work,Room Cleaning Work,,10
+Pipeing Work,,15
+Painting Work,,12
+Roof Repair Work,Room Cleaning Work,,10
+Pipeing Work,,15
+Electronic Work,,13
+Painting Work,,12
+Roof Repair Work,Room Cleaning Work,,10
+Pipeing Work,,15
+Electronic Work,,13
+Painting Work,,12

@@ -1,0 +1,26 @@
+1. optimal reliable routing path identification in manet with ftr-ahp model".
+
+
+
+
+Please find below..
+
+Dillirani - vulnerability
+
+Chandra- metro system
+---------- Forwarded message ----------
+
+
+For diilirani project:
+Requirements are :1) need to change the block diagram for phase 1 and phase 2
+                               2)they asked not to proceed with NN algorithm in phase 2, but they asking for enhanced detail implementation
+                               3)from the block diagram why classification algorithm is used
+                               4) objective is not explained
+For Chandrakala project( i have to explain the same paper 2mrw sir....but u please send the papers on other domain..i have to make sure with my guide)
+Requirements are :1) objective is not explained
+                               2) need to change the block diagram for phase 1 and phase 2
+                               3) need architecture diagram(should not be the same as base paper)
+                               4)what are all the inputs and output.
+                                5) what are the algorithms used
+                                6) what are the columns that dataset contains
+Sir,we have redo review on 2mrw...So please send the documents tonight..

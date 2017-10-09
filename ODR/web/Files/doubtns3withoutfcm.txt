@@ -1,0 +1,3 @@
+The Below screenshots taken for WITHOUT-FCM. Madam told, it was wrong. Delay and Loss, will not be decreased and pdr, throughput will not be increased, when adding attackers.
+
+Your FCM defense not worked properly. I can't able to take FCM defense. This weak mam checked, said it was wrong. So kindly check and give the result.  

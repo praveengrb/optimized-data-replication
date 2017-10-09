@@ -1,0 +1,12 @@
++,plus
+-,minus
+±,plus or minus
+*,multipliedby
+/,over;dividedby
+÷,divided
+=,equals
+>,greaterthan
+>>,much graterthan
+<<,much less than
+<,less than
+%,

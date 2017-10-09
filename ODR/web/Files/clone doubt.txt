@@ -1,0 +1,35 @@
+.NET TITLE - CLONE DETECTION
+
+
+ Following are the queries related to the coding part:
+
+1. what is Analyzerbackward.cs doing?
+2. is LexicalAnalyzer a predefined namespace?
+3. is EntitymappingLexer.cs and EntityMappingParser.cs self created?
+4. what is sampler.cs doing?
+5. where is the calculation of number of I/O statements, complexity, number of functions called, number of iterations and conditional statements, number of lines done?
+6. template conversion is done done anywhere.
+there is a small request. while calculating the levenshtein distance the factor of lines of code needs to be taken in to consideration. because if two files are having dissimilar lines of codes and cloning is present in them then the tool is not identifying them as clones as the levenshtein distance is coming out large in them. 
+Can you please add this factor to the project?
+
+
+
+
+1. what is Analyzerbackward.cs doing?
+2. is LexicalAnalyzer a predefined namespace?
+3. is EntitymappingLexer.cs and EntityMappingParser.cs self created?
+4. what is sampler.cs doing?
+
+This all files are created for reference 
+
+
+Analyzerbackward.cs - spliting the tokens
+
+If you need other then changing the namespace
+
+
+5. This is done in (87 to 417) number.
+
+6. The template conversion is done but the output is cannot be shown visvalized. This template covrsion output is the input for clone detecting file and directory leval(293 to 393)
+
+
