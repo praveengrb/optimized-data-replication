@@ -1,4 +1,3 @@
-
 package djb;
 
 public class Curve25519 {
