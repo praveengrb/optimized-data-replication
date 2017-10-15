@@ -92,7 +92,9 @@
 
 
 
-                                                <option><%=rs.getString(1)%></option>
+                                                <option value="<%=rs.getString(1)%>"><%=rs.getString(3)%>.txt</option>
+                                                
+                                                
                                                 <%
                                                     }
                                                 %>

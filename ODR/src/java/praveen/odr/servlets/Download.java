@@ -68,64 +68,65 @@ public class Download extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException, SQLException, NtruException, InstantiationException, IllegalAccessException {
 
-        String name = request.getParameter("filelist");
+        String uniqueFileId = request.getParameter("filelist");
         String path = request.getParameter("myText");
         String u = request.getParameter("userid");
-        System.out.println(name);
+        System.out.println(uniqueFileId);
 
         Connection con = new ConnectionManagerDAOImpl().getConnection();
-       // String sa = "select * from fileplaceing where id='" + name + "'";
+       // String sa = "select * from fileplaceing where id='" + uniqueFileId + "'";
         PreparedStatement pr = con.prepareStatement(Queries.SELECT_FILEPLACING_ID);
-        pr.setString(1,name);
+        pr.setString(1,uniqueFileId);
         ResultSet rs = pr.executeQuery();
-        String kk = "";
+        String locationOfFragments = "";
+        if (rs.next()) {
+            locationOfFragments = rs.getString(2);
+        }
         String decrypted = "";
-        //PrintWriter writer1 = new PrintWriter("F:/Project/ODR/Project/ODR/web/Download/" + name + ".txt");
+        //PrintWriter writer1 = new PrintWriter("F:/Project/ODR/Project/ODR/web/Download/" + uniqueFileId + ".txt");
 
-        PrintWriter writer1 = new PrintWriter(String.format(Constants.DOWNLOAD_FILE_LOCATION, name));//F:\Project\ODR\Project\ODR\web
+        PrintWriter writer1 = new PrintWriter(String.format(Constants.DOWNLOAD_FILE_LOCATION, uniqueFileId));//F:\Project\ODR\Project\ODR\web
         writer1.print("");
         writer1.close();
-        // FileWriter writer = new FileWriter("F:/Project/ODR/Project/ODR/web/Download/" + name + ".txt", true);
-        FileWriter writer = new FileWriter(String.format(Constants.DOWNLOAD_FILE_LOCATION, name), true);
+        // FileWriter writer = new FileWriter("F:/Project/ODR/Project/ODR/web/Download/" + uniqueFileId + ".txt", true);
+        FileWriter writer = new FileWriter(String.format(Constants.DOWNLOAD_FILE_LOCATION, uniqueFileId), true);
 
-        if (rs.next()) {
-            kk = rs.getString(2);
-        }
-        String[] hj = kk.split(",");
-        int size = hj.length;
-        System.out.println(size);
-        int i = 0;
-        for (String k : hj) {
+       
+        String[] fragmentLocations = locationOfFragments.split(",");
+        int numberOfFragments = fragmentLocations.length;
+        System.out.println(numberOfFragments);
+        int fragIncrementer = 0;
+        for (String fragmentLocation : fragmentLocations) {
 
-            String PART_NAME = name + "data" + i + Constants.TXT_FILE_EXTENSION;
+            String PART_NAME = uniqueFileId + "data" + fragIncrementer + Constants.TXT_FILE_EXTENSION;
 
-            Path path1 = Paths.get(Constants.KEY_FILE_LOCATION + name + Constants.TXT_FILE_EXTENSION);
-            byte[] data = Files.readAllBytes(path1);
-            System.out.println(new String(data));
-            System.out.println(k);
+            Path encryptedKeyFIle = Paths.get(Constants.KEY_FILE_LOCATION + uniqueFileId + Constants.TXT_FILE_EXTENSION);
+            byte[] bytsOfEKeyFile = Files.readAllBytes(encryptedKeyFIle);
+            System.out.println(new String(bytsOfEKeyFile));
+            System.out.println(fragmentLocation);
             String partFileName = Constants.FRAGMENT_SERVER_LOCATION
-                    .replaceAll(Constants.LOCATION, k)
+                    .replaceAll(Constants.LOCATION, fragmentLocation)
                     .replaceAll(Constants.PART, PART_NAME);
-            Path path3 = Paths.get(partFileName);
-            encryptedBuf = Files.readAllBytes(path3);
+            Path partFilePath = Paths.get(partFileName);
+            encryptedBuf = Files.readAllBytes(partFilePath);
 
             System.out.println(new String(encryptedBuf));
 
-            String pubkeyFile1 = "public_Key";
-            String privkeyFile1 = "private_Key";
+            String publicKeyFile = "public_Key";
+            String privateKeyFile = "private_Key";
 
             OID oid1 = parseOIDName("ees1499ep1");
 
-            Random prng1 = new Random(data);
+            Random prng1 = new Random(bytsOfEKeyFile);
 
-            NtruEncryptKey ntruKeys1 = setupNtruEncryptKey(prng1, oid1, pubkeyFile1, privkeyFile1);
+            NtruEncryptKey ntruKeys1 = setupNtruEncryptKey(prng1, oid1, publicKeyFile, privateKeyFile);
 
-            String k1 = decryptMessage(ntruKeys1, new String(encryptedBuf), name, i, k);
-            System.out.println("Decrypted: " + k1);
+            String deCryptedMessage = decryptMessage(ntruKeys1, new String(encryptedBuf), uniqueFileId, fragIncrementer, fragmentLocation);
+            System.out.println("Decrypted: " + deCryptedMessage);
 
-            decrypted = decrypted + k1;
+            decrypted = decrypted + deCryptedMessage;
 
-            i = i + 1;
+            fragIncrementer = fragIncrementer + 1;
 
         }
         writer.write(decrypted);
@@ -133,11 +134,11 @@ public class Download extends HttpServlet {
 
         writer.close();
 
-        //String param1 = "F:/Project/ODR/Project/ODR/web/Download/" + name + ".txt";
-        String param1 = String.format(Constants.DOWNLOAD_FILE_LOCATION, name);
+        //String downloadFilePath = "F:/Project/ODR/Project/ODR/web/Download/" + uniqueFileId + ".txt";
+        //String downloadFilePath = String.format(Constants.DOWNLOAD_FILE_LOCATION, uniqueFileId);
         // reads input file from an absolute path
-        String filePath = param1;
-        File downloadFile = new File(filePath);
+        String downloadFilePath = String.format(Constants.DOWNLOAD_FILE_LOCATION, uniqueFileId);
+        File downloadFile = new File(downloadFilePath);
         FileInputStream inStream = new FileInputStream(downloadFile);
 
         // if you want to use a relative path to context root:
@@ -148,7 +149,7 @@ public class Download extends HttpServlet {
         ServletContext context = getServletContext();
 
         // gets MIME type of the file
-        String mimeType = context.getMimeType(filePath);
+        String mimeType = context.getMimeType(downloadFilePath);
         if (mimeType == null) {
             // set to binary type if MIME mapping not found
             mimeType = "application/octet-stream";

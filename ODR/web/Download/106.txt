@@ -1,7 +1,0 @@
-Advantage:
-
-1. Aggregate signature can resist coalition attacks.
-
-2. It can reduce the communication and storage cost.
-
-3. Improve the Packet delivery ratio.
