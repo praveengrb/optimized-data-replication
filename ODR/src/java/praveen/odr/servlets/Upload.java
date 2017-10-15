@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import praveen.odr.dao.impl.ConnectionManagerDAOImpl;
 
 /**
  *
@@ -113,20 +114,7 @@ public class Upload extends HttpServlet {
 		}
 
 		try {
-			try {
-				try {
-					Class.forName(Constants.DRIVER_NAME).newInstance();
-				} catch (IllegalAccessException ex) {
-					Logger.getLogger(Upload.class.getName()).log(Level.SEVERE, null, ex);
-				}
-			} catch (InstantiationException ex) {
-				Logger.getLogger(Upload.class.getName()).log(Level.SEVERE, null, ex);
-			}
-
-			Connection con;
-
-			con = (Connection) DriverManager.getConnection(Constants.DATABASE_URL, Constants.DATABASE_USERNAME,
-					Constants.DATABASE_PASSWORD);
+			Connection con = new ConnectionManagerDAOImpl().getConnection();
 
 			String hh = ll + Constants.FILE_BKP_LOCATION + fileName;
 			String sql = "insert into ufile (uid,fname,des,file)values('" + u + "','" + name + "','" + des + "','" + hh

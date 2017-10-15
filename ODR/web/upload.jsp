@@ -76,7 +76,7 @@
         
                                                                             File Name <p class="wow fadeInRight"><input type="text" name="name" placeholder="File name "></p>
 										  Description <p class="wow fadeInRight"><input type="text" name="des" placeholder="Description "></p>
-										 File UPload <p class="wow fadeInRight"> <input type="file" name="files" accept="image/*">
+										 File UPload <p class="wow fadeInRight"> <input type="file" name="files" accept=".txt">
                                    </p>
 									
                                                                             <input type="submit" class="button pull-left wow fadeInLeft" value="Submit">

@@ -39,6 +39,7 @@ import praveen.odr.encypt.Random;
 import praveen.odr.encrypt.NtruEncryptKey;
 
 import praveen.odr.constants.Constants;
+import praveen.odr.dao.impl.ConnectionManagerDAOImpl;
 
 /**
  *
@@ -48,10 +49,10 @@ import praveen.odr.constants.Constants;
 public class Download extends HttpServlet {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = -1158354971869912836L;
-	/**
+     *
+     */
+    private static final long serialVersionUID = -1158354971869912836L;
+    /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
@@ -65,27 +66,14 @@ public class Download extends HttpServlet {
     private static byte wrappedAESKey[];
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, ClassNotFoundException, SQLException, NtruException {
+            throws ServletException, IOException, ClassNotFoundException, SQLException, NtruException, InstantiationException, IllegalAccessException {
 
         String name = request.getParameter("filelist");
         String path = request.getParameter("myText");
         String u = request.getParameter("userid");
         System.out.println(name);
 
-        try {
-            try {
-                Class.forName(Constants.DRIVER_NAME).newInstance();
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(Download.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (InstantiationException ex) {
-            Logger.getLogger(Download.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        Connection con;
-
-        con = (Connection) DriverManager.getConnection(Constants.DATABASE_URL, Constants.DATABASE_USERNAME,
-				Constants.DATABASE_PASSWORD);
+        Connection con = new ConnectionManagerDAOImpl().getConnection();
         String sa = "select * from fileplaceing where id='" + name + "'";
         PreparedStatement pr = con.prepareStatement(sa);
         ResultSet rs = pr.executeQuery();
@@ -221,7 +209,7 @@ public class Download extends HttpServlet {
         try {
 
             String PART_NAME = id + "data" + i + ".txt";
-            Path path1 = Paths.get(Constants.KEY_FILE_LOCATION+ id + ".txt");
+            Path path1 = Paths.get(Constants.KEY_FILE_LOCATION + id + ".txt");
             byte[] data = Files.readAllBytes(path1);
             Path path = Paths.get("F:/Project/ODR/Project/ODR/web/Server/" + server + "/" + PART_NAME);
             byte[] data1 = Files.readAllBytes(path);
@@ -266,6 +254,10 @@ public class Download extends HttpServlet {
             processRequest(request, response);
         } catch (ClassNotFoundException | SQLException | NtruException ex) {
             Logger.getLogger(Download.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(Download.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(Download.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -282,7 +274,7 @@ public class Download extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (ClassNotFoundException | SQLException | NtruException ex) {
+        } catch (ClassNotFoundException | SQLException | NtruException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(Download.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
