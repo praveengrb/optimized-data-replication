@@ -30,5 +30,11 @@ public class Queries {
     public static String SERVERNODE_ID = "SELECT id FROM servernode";
     
     public static String INSERT_SERVERNODE = "insert into servernode (dis,capacity,color)values(?,?,?)";
-;
+    
+    public static String INSERT_UNIQUEFILE = "insert into ufile (uid,fname,des,file)values(?,?,?,?)"; 
+   
+    public static String ID_UIDFILE="SELECT id FROM ufile";
+    
+    public static String UPDATE_FILEPLACING_BYID = "update  fileplaceing set location = ? , replacing = ? where id =?";
+
 }

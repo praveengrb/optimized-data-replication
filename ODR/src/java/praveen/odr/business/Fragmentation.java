@@ -34,13 +34,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -48,7 +45,6 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import praveen.odr.constants.Queries;
 import praveen.odr.dao.impl.ConnectionManagerDAOImpl;
-import praveen.odr.servlets.Download;
 
 public class Fragmentation {
 
@@ -196,23 +192,13 @@ public class Fragmentation {
     }
 
     public static ArrayList<String> readAndFragment(String SourceFileName, int CHUNK_SIZE, int id)
-            throws IOException, NtruException, ClassNotFoundException, SQLException {
+            throws IOException, NtruException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         ArrayList<String> lo = new ArrayList<>();
 
-        try {
-
-            Class.forName(Constants.DRIVER_NAME).newInstance();
-
-        } catch (IllegalAccessException | InstantiationException ex) {
-            Logger.getLogger(Download.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        Connection con;
-
-        con = (Connection) DriverManager.getConnection(Constants.DATABASE_URL, Constants.DATABASE_USERNAME,
-                Constants.DATABASE_PASSWORD);
-        String sa = "select * from fileplaceing where id='" + id + "'";
-        PreparedStatement pr = con.prepareStatement(sa);
+        Connection con= new ConnectionManagerDAOImpl().getConnection();
+        //String sa = "select * from fileplaceing where id='" + id + "'";
+        PreparedStatement pr = con.prepareStatement(Queries.SELECT_FILEPLACING_ID);
+        pr.setString(1,id+"");
         ResultSet rs = pr.executeQuery();
         String kk = "";
         String decrypted = "";
