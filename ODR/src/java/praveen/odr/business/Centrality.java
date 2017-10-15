@@ -205,7 +205,8 @@ public class Centrality {
 
                     //String query = "update servernode set capacity = '" + capacity + "' where id ='" + id + "'";
                     PreparedStatement preparedStmt = con.prepareStatement(Queries.UPDATE_SERVERNODE_BYID);
-
+                    preparedStmt.setString(1, capacity+"");
+                    preparedStmt.setString(2, id+"");
                     preparedStmt.executeUpdate();
 
                     for (int jk = 0; jk <= nodecount; jk++) {
