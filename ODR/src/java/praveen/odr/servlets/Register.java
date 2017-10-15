@@ -7,12 +7,7 @@ package praveen.odr.servlets;
  */
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -21,8 +16,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import praveen.odr.business.UserManagement;
+import praveen.odr.exception.ODRDataAccessException;
 
-import praveen.odr.constants.Constants;
+import praveen.odr.model.User;
 
 /**
  *
@@ -32,11 +29,11 @@ import praveen.odr.constants.Constants;
 public class Register extends HttpServlet {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 8860216808734418991L;
+     *
+     */
+    private static final long serialVersionUID = 8860216808734418991L;
 
-	/**
+    /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
@@ -55,33 +52,22 @@ public class Register extends HttpServlet {
         String pass = request.getParameter("pass");
 
         try {
-            try {
-                try {
-                    Class.forName(Constants.DRIVER_NAME).newInstance();
-                } catch (InstantiationException | IllegalAccessException ex) {
-                    Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            Connection con = (Connection) DriverManager.getConnection(Constants.DATABASE_URL, Constants.DATABASE_USERNAME,
-					Constants.DATABASE_PASSWORD);
-            String sa = "select * from account where emailid='" + eid + "'";
-            PreparedStatement pr = con.prepareStatement(sa);
-            ResultSet rs = pr.executeQuery();
-
-            if (rs.next()) {
+            User user = new User();
+            user.setName(name);
+            user.setEmailAddress(eid);
+            user.setPassword(pass);
+            UserManagement userManagement = new UserManagement();
+            if (userManagement.isUserExists(user.getEmailAddress())) {
                 request.setAttribute("mess", "Email Id already Existed");
                 RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
                 rd.forward(request, response);
             } else {
-                String sql = "insert into account (name,emailid,password)values('" + name + "','" + eid + "','" + pass + "')";
-                Statement st = con.createStatement();
-                int s = st.executeUpdate(sql);
+                userManagement.registerUser(user);
                 response.sendRedirect("login.jsp");
             }
 
+        } catch (ODRDataAccessException ex) {
+            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             out.close();
         }
