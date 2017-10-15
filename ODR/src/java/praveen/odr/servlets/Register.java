@@ -57,7 +57,7 @@ public class Register extends HttpServlet {
             user.setEmailAddress(eid);
             user.setPassword(pass);
             UserManagement userManagement = new UserManagement();
-            if (userManagement.isUserExists(user.getEmailAddress())) {
+            if (userManagement.isUserExists(user)) {
                 request.setAttribute("mess", "Email Id already Existed");
                 RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
                 rd.forward(request, response);

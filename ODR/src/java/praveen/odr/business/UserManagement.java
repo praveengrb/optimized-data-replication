@@ -19,9 +19,9 @@ import praveen.odr.model.User;
  * @author Praveen
  */
 public class UserManagement {
-    private UserManagementDAO userManagementDAO = new UserManagementDAOImpl();
-    public Status registerUser(User user){
-        Status status = new Status(false,Constants.SUCCESS);
+    private UserManagementDAO<User> userManagementDAO = new UserManagementDAOImpl();
+    public Status<User> registerUser(User user){
+        Status<User> status = new Status<User>(false,Constants.SUCCESS);
         try {
             userManagementDAO.registerUser(user);
         } catch (ODRDataAccessException ex) {
@@ -30,8 +30,10 @@ public class UserManagement {
         return status;
     }
     
-    public boolean isUserExists(String emailAddress) throws ODRDataAccessException{
-       return userManagementDAO.isUserExists(emailAddress);
+    public boolean isUserExists(User user) throws ODRDataAccessException{
+       return userManagementDAO.isUserExists(user).isDone(); 
     }
-    
+    public Status<User> isValidUser(User user) throws ODRDataAccessException{
+       return userManagementDAO.isUserExists(user); 
+    }
 }

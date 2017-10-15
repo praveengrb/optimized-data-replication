@@ -9,6 +9,15 @@ public class User {
     String name;
     String emailAddress;
     String password;    
+    boolean admin;
+    
+    public void setAdmin(boolean admin){
+        this.admin = admin;
+    }
+    
+    public boolean isAdmin(){
+        return admin;
+    }
     
     public void setName(String name){
         this.name = name;

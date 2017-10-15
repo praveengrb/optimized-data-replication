@@ -20,8 +20,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import praveen.odr.business.UserManagement;
 
 import praveen.odr.constants.Constants;
+import praveen.odr.exception.ODRDataAccessException;
+import praveen.odr.model.Status;
+import praveen.odr.model.User;
 
 /**
  *
@@ -53,27 +57,18 @@ public class Login extends HttpServlet {
         String pass = request.getParameter("pass");
         /* TODO output your page here. You may use following sample code. */
         try {
-            try {
-                try {
-                    Class.forName(Constants.DRIVER_NAME).newInstance();
-                } catch (InstantiationException | IllegalAccessException ex) {
-                    Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            Connection con = (Connection) DriverManager.getConnection(Constants.DATABASE_URL, Constants.DATABASE_USERNAME,
-					Constants.DATABASE_PASSWORD);
-            String sa = "select * from account where emailid='" + eid + "' and password='" + pass + "'";
-            PreparedStatement pr = con.prepareStatement(sa);
-            ResultSet rs = pr.executeQuery();
-
-            if (rs.next()) {
-                request.setAttribute("id", eid);
+            UserManagement userManagement = new UserManagement();
+            User user = new User();
+            user.setEmailAddress(eid);
+            user.setPassword(pass);
+            Status<User> userDetails = userManagement.isValidUser(user);
+            if (userDetails.isDone()) {
+                request.setAttribute("id", user.getEmailAddress());
                 RequestDispatcher rd = request.getRequestDispatcher("user.jsp");
                 rd.forward(request, response);
-            } else if (eid.equalsIgnoreCase("Admin@gmail.com") && pass.equalsIgnoreCase("Admin")) {
+            } 
+            else if (eid.equalsIgnoreCase("Admin@gmail.com") && pass.equalsIgnoreCase("Admin")) {
+            //else if (eid.equalsIgnoreCase("Admin@gmail.com") && pass.equalsIgnoreCase("Admin")) {
                 request.setAttribute("id", "Welcome Admin");
                 RequestDispatcher rd = request.getRequestDispatcher("Admin.html");
                 rd.forward(request, response);
@@ -84,7 +79,9 @@ public class Login extends HttpServlet {
                 rd.forward(request, response);
 
             }
-        } finally {
+        }   catch (ODRDataAccessException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
             out.close();
         }
     }

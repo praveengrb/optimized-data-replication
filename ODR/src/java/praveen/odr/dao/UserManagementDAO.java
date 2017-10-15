@@ -7,16 +7,18 @@ package praveen.odr.dao;
 
 import praveen.odr.exception.ODRDataAccessException;
 import praveen.odr.model.Status;
-import praveen.odr.model.User;
 
 /**
  *
  * @author Praveen
+ * @param <T>
  */
-public interface UserManagementDAO {
+public interface UserManagementDAO<T> {
 
-    public boolean isUserExists(String emailId) throws ODRDataAccessException;
+    public Status<T> isUserExists(T user) throws ODRDataAccessException;
 
-    public Status registerUser(User user) throws ODRDataAccessException;
+    public Status<T> isValidUser(T user) throws ODRDataAccessException;
+
+    public Status<T> registerUser(T user) throws ODRDataAccessException;
 
 }
