@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import praveen.odr.constants.Constants;
+
 /**
  *
  * @author Praveen Sankarasubramanian
@@ -30,6 +32,11 @@ import javax.servlet.http.HttpServletResponse;
 public class Register extends HttpServlet {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8860216808734418991L;
+
+	/**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
@@ -50,7 +57,7 @@ public class Register extends HttpServlet {
         try {
             try {
                 try {
-                    Class.forName("com.mysql.jdbc.Driver").newInstance();
+                    Class.forName(Constants.DRIVER_NAME).newInstance();
                 } catch (InstantiationException | IllegalAccessException ex) {
                     Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -58,7 +65,8 @@ public class Register extends HttpServlet {
                 Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/odr", "root", "root");
+            Connection con = (Connection) DriverManager.getConnection(Constants.DATABASE_URL, Constants.DATABASE_USERNAME,
+					Constants.DATABASE_PASSWORD);
             String sa = "select * from account where emailid='" + eid + "'";
             PreparedStatement pr = con.prepareStatement(sa);
             ResultSet rs = pr.executeQuery();

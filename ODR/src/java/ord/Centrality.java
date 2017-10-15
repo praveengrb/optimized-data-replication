@@ -6,11 +6,27 @@
 package ord;
 
 import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.sql.*;
-import java.util.*;
-import java.util.Map.Entry;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import praveen.odr.constants.Constants;
+
+import java.util.Random;
+import java.util.Set;
 
 /**
  *
@@ -39,18 +55,19 @@ public class Centrality {
 
     public static HashMap<String, Integer> repli = new HashMap<>();
 
-    public static ArrayList segment = new ArrayList();
+    public static ArrayList<Integer> segment = new ArrayList<>();
 
     public static void fragmentation(int size, int fid) throws ClassNotFoundException, SQLException, IOException, InstantiationException, IllegalAccessException {
 
         // write new line
-        ArrayList pla = new ArrayList();
+        ArrayList<?> pla = new ArrayList<>();
 
         HashMap<String, Integer> result = new HashMap<>();
 
-        Class.forName("com.mysql.jdbc.Driver").newInstance();
+        Class.forName(Constants.DRIVER_NAME).newInstance();
 
-        Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/odr", "root", "root");
+        Connection con = (Connection) DriverManager.getConnection(Constants.DATABASE_URL, Constants.DATABASE_USERNAME,
+				Constants.DATABASE_PASSWORD);
 
         String sa = "select * from servernode";
         PreparedStatement pr = con.prepareStatement(sa);
@@ -65,14 +82,14 @@ public class Centrality {
 
         List<Entry<String, Integer>> list = sortByValueInDecreasingOrder(result);
         int i = 0;
-        PrintWriter writer1 = new PrintWriter("F://Project/MyFile.txt");//F://Project
+        PrintWriter writer1 = new PrintWriter(Constants.FRAGMENT_FILE_LOCATION);//F://Project
         writer1.print("");
         writer1.close();
         System.out.println(nodecount);
         int cc = nodecount + 1;
         String hj = String.valueOf(cc);
         try {
-            FileWriter writer = new FileWriter("F://Project/MyFile.txt", true);
+            FileWriter writer = new FileWriter(Constants.FRAGMENT_FILE_LOCATION, true);
             writer.write(hj);
             writer.write("\r\n");
             writer.write("\r\n");
@@ -132,7 +149,7 @@ public class Centrality {
                 totlanumberofsp = 0;
                 START = (String) entry1.getKey();
                 END = String.valueOf(entry1.getValue());
-                LinkedList<String> visited = new LinkedList();
+                LinkedList<String> visited = new LinkedList<>();
                 visited.add(START);
                 Random randomGenerator = new Random();
                 totlanumberofsp = randomGenerator.nextInt(100);
@@ -273,7 +290,7 @@ public class Centrality {
 
         String sql = "insert into fileplaceing (id,location,replacing)values('" + fid + "','" + placeing + "','" + replaceing + "')";
         Statement st = con.createStatement();
-        int s = st.executeUpdate(sql);
+        st.executeUpdate(sql);
 
     }
     static int h = 0;
@@ -281,7 +298,7 @@ public class Centrality {
     public static void printPath(LinkedList<String> visited) {
         int value = 0;
 
-        ArrayList fg = new ArrayList();
+        ArrayList<String> fg = new ArrayList<>();
 
         for (String visitedNode : visited) {
             fg.add(visitedNode);

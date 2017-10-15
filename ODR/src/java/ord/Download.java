@@ -4,17 +4,24 @@
  */
 package ord;
 
-import com.securityinnovation.jNeo.NtruException;
-import com.securityinnovation.jNeo.OID;
-import com.securityinnovation.jNeo.Random;
-import com.securityinnovation.jNeo.ntruencrypt.NtruEncryptKey;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -26,6 +33,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.securityinnovation.jNeo.NtruException;
+import com.securityinnovation.jNeo.OID;
+import com.securityinnovation.jNeo.Random;
+import com.securityinnovation.jNeo.ntruencrypt.NtruEncryptKey;
+
+import praveen.odr.constants.Constants;
+
 /**
  *
  * @author Praveen Sankarasubramanian
@@ -34,6 +48,10 @@ import javax.servlet.http.HttpServletResponse;
 public class Download extends HttpServlet {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1158354971869912836L;
+	/**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
@@ -50,14 +68,13 @@ public class Download extends HttpServlet {
             throws ServletException, IOException, ClassNotFoundException, SQLException, NtruException {
 
         String name = request.getParameter("filelist");
-
         String path = request.getParameter("myText");
         String u = request.getParameter("userid");
         System.out.println(name);
 
         try {
             try {
-                Class.forName("com.mysql.jdbc.Driver").newInstance();
+                Class.forName(Constants.DRIVER_NAME).newInstance();
             } catch (IllegalAccessException ex) {
                 Logger.getLogger(Download.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -67,16 +84,17 @@ public class Download extends HttpServlet {
 
         Connection con;
 
-        con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/odr", "root", "root");
+        con = (Connection) DriverManager.getConnection(Constants.DATABASE_URL, Constants.DATABASE_USERNAME,
+				Constants.DATABASE_PASSWORD);
         String sa = "select * from fileplaceing where id='" + name + "'";
         PreparedStatement pr = con.prepareStatement(sa);
         ResultSet rs = pr.executeQuery();
         String kk = "";
         String decrypted = "";
-        PrintWriter writer1 = new PrintWriter("F:\\Project\\ODR\\Project\\ODR\\web\\Download\\" + name + ".txt");//F:\Project\ODR\Project\ODR\web
+        PrintWriter writer1 = new PrintWriter("F:/Project/ODR/Project/ODR/web/Download/" + name + ".txt");//F:\Project\ODR\Project\ODR\web
         writer1.print("");
         writer1.close();
-        FileWriter writer = new FileWriter("F:\\Project\\ODR\\Project\\ODR\\web\\Download\\" + name + ".txt", true);
+        FileWriter writer = new FileWriter("F:/Project/ODR/Project/ODR/web/Download/" + name + ".txt", true);
 
         if (rs.next()) {
             kk = rs.getString(2);
@@ -89,11 +107,11 @@ public class Download extends HttpServlet {
 
             String PART_NAME = name + "data" + i + ".txt";
 
-            Path path1 = Paths.get("F:\\Project\\ODR\\Project\\ODR//Key//" + name + ".txt");
+            Path path1 = Paths.get(Constants.KEY_FILE_LOCATION + name + ".txt");
             byte[] data = Files.readAllBytes(path1);
             System.out.println(new String(data));
             System.out.println(k);
-            Path path3 = Paths.get("F:\\Project\\ODR\\Project\\ODR\\web\\Server\\" + k + "\\" + PART_NAME);
+            Path path3 = Paths.get("F:/Project/ODR/Project/ODR/web/Server/" + k + "/" + PART_NAME);
             encryptedBuf = Files.readAllBytes(path3);
 
             System.out.println(new String(encryptedBuf));
@@ -120,7 +138,7 @@ public class Download extends HttpServlet {
 
         writer.close();
 
-        String param1 = "F:\\Project\\ODR\\Project\\ODR\\web\\Download\\" + name + ".txt";
+        String param1 = "F:/Project/ODR/Project/ODR/web/Download/" + name + ".txt";
         // reads input file from an absolute path
         String filePath = param1;
         File downloadFile = new File(filePath);
@@ -203,16 +221,16 @@ public class Download extends HttpServlet {
         try {
 
             String PART_NAME = id + "data" + i + ".txt";
-            Path path1 = Paths.get("F:\\Project\\ODR\\Project\\ODR//Key//" + id + ".txt");
+            Path path1 = Paths.get(Constants.KEY_FILE_LOCATION+ id + ".txt");
             byte[] data = Files.readAllBytes(path1);
-            Path path = Paths.get("F:\\Project\\ODR\\Project\\ODR\\web\\Server\\" + server + "\\" + PART_NAME);
+            Path path = Paths.get("F:/Project/ODR/Project/ODR/web/Server/" + server + "/" + PART_NAME);
             byte[] data1 = Files.readAllBytes(path);
             byte encFileContents[] = data1;
             Random prng1 = new Random(data);
-            Path aes = Paths.get("F:\\Project\\ODR\\Project\\ODR//Key//" + id + "aes" + i + ".txt");
+            Path aes = Paths.get(Constants.KEY_FILE_LOCATION + id + "aes" + i + ".txt");
             byte[] da = Files.readAllBytes(aes);
             wrappedAESKey = ntruKey.encrypt(da, prng1);
-            Path path3 = Paths.get("F:\\Project\\ODR\\Project\\ODR//Key//" + id + "iv" + i + ".txt");
+            Path path3 = Paths.get(Constants.KEY_FILE_LOCATION + id + "iv" + i + ".txt");
             ivBytes = Files.readAllBytes(path3);
 
             IvParameterSpec iv = new IvParameterSpec(ivBytes);

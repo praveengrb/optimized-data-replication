@@ -1,24 +1,3 @@
-/******************************************************************************
- * NTRU Cryptography Reference Source Code
- * Copyright (c) 2009-2013, by Security Innovation, Inc. All rights reserved.
- *
- * Copyright (C) 2009-2013  Security Innovation
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *********************************************************************************/
-
 package com.securityinnovation.jNeo.math;
 
 import com.securityinnovation.jNeo.inputstream.IGF2;
@@ -41,6 +20,11 @@ public class BPGM3
      * Generate a trinomial of degree N-1 that has <code>numOnes</code>
      * coeffcients set to +1 and <code>numNegOnes</code> coefficients
      * set to -1, and all other coefficients set to 0.
+     * @param N
+     * @param numOnes
+     * @param numNegOnes
+     * @param igf
+     * @return 
      */
     public static FullPolynomial genTrinomial(
         int          N,

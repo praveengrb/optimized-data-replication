@@ -1,24 +1,3 @@
-/******************************************************************************
- * NTRU Cryptography Reference Source Code
- * Copyright (c) 2009-2013, by Security Innovation, Inc. All rights reserved.
- *
- * Copyright (C) 2009-2013  Security Innovation
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *********************************************************************************/
-
 package com.securityinnovation.jNeo.ntruencrypt;
 
 import java.io.ByteArrayInputStream;
@@ -28,12 +7,7 @@ import static org.junit.Assert.*;
 
 import com.securityinnovation.jNeo.OID;
 import com.securityinnovation.jNeo.NtruException;
-import com.securityinnovation.jNeo.ntruencrypt.NtruEncryptKey;
-import com.securityinnovation.jNeo.inputstream.IGF2;
-import com.securityinnovation.jNeo.math.BitPack;
 import com.securityinnovation.jNeo.math.FullPolynomial;
-import com.securityinnovation.jNeo.math.PolynomialInverterModPrime;
-import com.securityinnovation.jNeo.math.BPGM3;
 import com.securityinnovation.testvectors.NtruEncryptTestVector;
 
 public class NtruEncryptKeyTestCase {
@@ -47,12 +21,11 @@ public class NtruEncryptKeyTestCase {
     @Test public void test_generateM()
         throws NtruException
     {
-        for (int t=0; t<tests.length; t++)
-        {
-            ByteArrayInputStream rng = new ByteArrayInputStream(tests[t].b);
-            NtruEncryptKey keys = new NtruEncryptKey(tests[t].oid);
-            byte M[] = keys.generateM(tests[t].m, rng);
-            assertArrayEquals(tests[t].Mbin, M);
+        for (NtruEncryptTestVector test : tests) {
+            ByteArrayInputStream rng = new ByteArrayInputStream(test.b);
+            NtruEncryptKey keys = new NtruEncryptKey(test.oid);
+            byte[] M = keys.generateM(test.m, rng);
+            assertArrayEquals(test.Mbin, M);
         }
     }
 
@@ -388,11 +361,9 @@ public class NtruEncryptKeyTestCase {
     @Test public void test_parseMgsLengthFromM()
         throws NtruException
     {
-        for (int t=0; t<tests.length; t++)
-        {
-            KeyParams keyParams = KeyParams.getKeyParams(tests[t].oid);
-            NtruEncryptKey keys = new NtruEncryptKey(tests[t].oid);
-
+        for (NtruEncryptTestVector test : tests) {
+            KeyParams keyParams = KeyParams.getKeyParams(test.oid);
+            NtruEncryptKey keys = new NtruEncryptKey(test.oid);
             byte M[] = new byte[keyParams.N];
             java.util.Arrays.fill(M, (byte) 0);
             for (int i=1; i<12; i++)
@@ -470,21 +441,17 @@ public class NtruEncryptKeyTestCase {
     @Test public void test_encdec()
         throws NtruException
     {
-        for (int t=0; t<tests.length; t++)
-        {
-            KeyParams keyParams = KeyParams.getKeyParams(tests[t].oid);
-            NtruEncryptKey keys = new NtruEncryptKey(tests[t].oid);
-
+        for (NtruEncryptTestVector test : tests) {
+            KeyParams keyParams = KeyParams.getKeyParams(test.oid);
+            NtruEncryptKey keys = new NtruEncryptKey(test.oid);
             // Set f, h.
-            keys.h = new FullPolynomial(tests[t].h);
-            keys.f = new FullPolynomial(tests[t].f);
-
+            keys.h = new FullPolynomial(test.h);
+            keys.f = new FullPolynomial(test.f);
             // Do encryption
-            ByteArrayInputStream prng = new ByteArrayInputStream(tests[t].b);
-            byte ciphertext[] = keys.encrypt(tests[t].m, prng);
-
+            ByteArrayInputStream prng = new ByteArrayInputStream(test.b);
+            byte[] ciphertext = keys.encrypt(test.m, prng);
             byte m[] = keys.decrypt(ciphertext);
-            assertArrayEquals(tests[t].m, m);
+            assertArrayEquals(test.m, m);
         }
     }
 }

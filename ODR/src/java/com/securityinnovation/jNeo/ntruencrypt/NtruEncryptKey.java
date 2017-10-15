@@ -1,34 +1,11 @@
-/******************************************************************************
- * NTRU Cryptography Reference Source Code
- * Copyright (c) 2009-2013, by Security Innovation, Inc. All rights reserved.
- *
- * Copyright (C) 2009-2013  Security Innovation
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *********************************************************************************/
-
 package com.securityinnovation.jNeo.ntruencrypt;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import com.securityinnovation.jNeo.OID;
 import com.securityinnovation.jNeo.Random;
 import com.securityinnovation.jNeo.RandomExtractor;
-import com.securityinnovation.jNeo.NtruException;
 import com.securityinnovation.jNeo.CiphertextBadLengthException;
 import com.securityinnovation.jNeo.DecryptionFailureException;
 import com.securityinnovation.jNeo.FormatNotSupportedException;
@@ -44,7 +21,6 @@ import com.securityinnovation.jNeo.inputstream.MGF1;
 import com.securityinnovation.jNeo.inputstream.IGF2;
 import com.securityinnovation.jNeo.ntruencrypt.encoder.NtruEncryptKeyNativeEncoder;
 import com.securityinnovation.jNeo.ntruencrypt.encoder.RawKeyData;
-import com.securityinnovation.jNeo.ntruencrypt.encoder.KeyFormatterUtil;
 
 
 /**
@@ -75,6 +51,10 @@ public class NtruEncryptKey
     /**
      * Generate a new keypair for the specified parameter set.
      * (see com.securityinnovation.jNeo.OID for a list of parameter set identifiers).
+     * @param oid
+     * @param prng
+     * @return 
+     * @throws com.securityinnovation.jNeo.ParamSetNotSupportedException 
      */
     public static NtruEncryptKey genKey(
         OID          oid,
@@ -164,6 +144,9 @@ public class NtruEncryptKey
      * Create a new key from the supplied keyblob. The key blob
      * can be either a public or private key blob generated with
      * <code>getPubKey()</code> or <code>getPrivKey()</code>.
+     * @param keyBlob
+     * @throws com.securityinnovation.jNeo.FormatNotSupportedException
+     * @throws com.securityinnovation.jNeo.ParamSetNotSupportedException
      */
     public NtruEncryptKey(
         byte keyBlob[])
@@ -206,6 +189,8 @@ public class NtruEncryptKey
 
     /**
      * Return the blob of the public key.
+     * @return 
+     * @throws com.securityinnovation.jNeo.ObjectClosedException 
      */
     public byte[] getPubKey()
         throws ObjectClosedException
@@ -218,6 +203,9 @@ public class NtruEncryptKey
 
     /**
      * Return the blob of the private key.
+     * @return 
+     * @throws com.securityinnovation.jNeo.ObjectClosedException 
+     * @throws com.securityinnovation.jNeo.NoPrivateKeyException 
      */
     public byte[] getPrivKey()
         throws ObjectClosedException, NoPrivateKeyException
@@ -237,6 +225,9 @@ public class NtruEncryptKey
      *
      * @param message the plaintext
      * @param prng the PRNG to use as a source of randomness during encryption.
+     * @return 
+     * @throws com.securityinnovation.jNeo.ObjectClosedException 
+     * @throws com.securityinnovation.jNeo.PlaintextBadLengthException 
      */
     public byte[] encrypt(
         byte    message[],

@@ -1,29 +1,7 @@
-/******************************************************************************
- * NTRU Cryptography Reference Source Code
- * Copyright (c) 2009-2013, by Security Innovation, Inc. All rights reserved.
- *
- * Copyright (C) 2009-2013  Security Innovation
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *********************************************************************************/
-
 package com.securityinnovation.jNeo.inputstream;
 
 import java.io.InputStream;
 import com.securityinnovation.jNeo.digest.DigestAlgorithm;
-import static com.securityinnovation.jNeo.digest.DigestAlgorithm.*;
 import com.securityinnovation.jNeo.digest.Digest;
 
 /**
@@ -38,6 +16,8 @@ public class X982Drbg extends InputStream
 {
     /**
      * Constructor that takes a seed to start the RNG
+     * @param hashAlgorithm
+     * @param _seed
      */
     public X982Drbg(
         DigestAlgorithm hashAlgorithm,
@@ -73,6 +53,7 @@ public class X982Drbg extends InputStream
      * This implementation does not support an application purpose
      * (the variable t). It also does not enforce the minimum entropy
      * requirements, or checks on the desired strength..
+     * @param _seed
      */
     public void seed(
         byte[] _seed)
@@ -171,7 +152,9 @@ public class X982Drbg extends InputStream
     /**
      * Implement the Hash_DRBG algorithm from the X9.82 spec.
      * This implementation does not support any user input.
+     * @return 
      */
+    @Override
     public int read()
     {
         byte b[] = new byte[1];
@@ -183,7 +166,11 @@ public class X982Drbg extends InputStream
     /**
      * Implement the Hash_DRBG algorithm from the X9.82 spec.
      * This implementation does not support any user input.
+     * @param out
+     * @param offset
+     * @return 
      */
+    @Override
     public int read(
         byte[] out,
         int    offset,
