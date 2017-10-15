@@ -62,7 +62,7 @@ public class Fragmentation {
         java.util.Random sysRand = new java.util.Random();
         sysRand.nextBytes(seed);
         System.out.println(Arrays.toString(seed));
-        try (FileOutputStream fos = new FileOutputStream(Constants.KEY_FILE_LOCATION + id + ".txt")) {
+        try (FileOutputStream fos = new FileOutputStream(Constants.KEY_FILE_LOCATION + id + Constants.TXT_FILE_EXTENSION)) {
             fos.write(seed);
         }
         Random prng = new Random(seed);
@@ -119,7 +119,7 @@ public class Fragmentation {
             byte[] encoded = aesKey.getEncoded();
             // System.out.println("key: " + encoded);
             try (FileOutputStream fos = new FileOutputStream(
-                    Constants.KEY_FILE_LOCATION + id + "aes" + count + ".txt")) {
+                    Constants.KEY_FILE_LOCATION + id + "aes" + count + Constants.TXT_FILE_EXTENSION)) {
                 fos.write(encoded);
             }
             // Get an IV
@@ -149,7 +149,7 @@ public class Fragmentation {
         output += wrappedAESKey + "\n";
         output += encryptedBuf.length + "\n";
         output += encryptedBuf + "\n";
-        FileOutputStream fos = new FileOutputStream(Constants.KEY_FILE_LOCATION + id + "iv" + count + ".txt");
+        FileOutputStream fos = new FileOutputStream(Constants.KEY_FILE_LOCATION + id + "iv" + count + Constants.TXT_FILE_EXTENSION);
         fos.write(ivBytes);
         fos.close();
         return output;
@@ -256,7 +256,7 @@ public class Fragmentation {
             inStream = new BufferedInputStream(new FileInputStream(willBeRead));
 
             while (totalBytesRead < FILE_SIZE) {
-                String PART_NAME = id + "data" + NUMBER_OF_CHUNKS + ".txt";
+                String PART_NAME = id + "data" + NUMBER_OF_CHUNKS + Constants.TXT_FILE_EXTENSION;
                 int bytesRemaining = FILE_SIZE - totalBytesRead;
                 if (bytesRemaining < CHUNK_SIZE) // Remaining Data Part is
                 // Smaller Than CHUNK_SIZE
@@ -277,13 +277,17 @@ public class Fragmentation {
 
                 String msg = new String(temporary);
 
-                String i = id + "data" + count + ".txt";
+                String i = id + "data" + count + Constants.TXT_FILE_EXTENSION;
 
                 encryptMessage(ntruKeys, prng, msg, id, count);
                 System.out.println("Encrypted: " + new String(encryptedBuf));
                 String server = (String) lo.get(count);
-                try (FileOutputStream fos = new FileOutputStream(
-                        "F:/Project/ODR/Project/ODR/web/Server/" + server + "/" + PART_NAME)) {
+                String partFileName = Constants.FRAGMENT_SERVER_LOCATION
+                        .replaceAll(Constants.LOCATION, server)
+                        .replaceAll(Constants.PART, PART_NAME);
+                //"F:/Project/ODR/Project/ODR/web/Server/" + server + "/" + PART_NAME
+                try (FileOutputStream fos = new FileOutputStream(partFileName
+                )) {
                     fos.write(encryptedBuf);
                 }
 
@@ -291,11 +295,11 @@ public class Fragmentation {
                 System.out.println("Total Bytes Read: " + totalBytesRead);
 
                 // decryption:
-                Path path1 = Paths.get(Constants.KEY_FILE_LOCATION + id + ".txt");
+                Path path1 = Paths.get(Constants.KEY_FILE_LOCATION + id + Constants.TXT_FILE_EXTENSION);
                 byte[] data = Files.readAllBytes(path1);
                 System.out.println(new String(data));
 
-                Path path3 = Paths.get("F:/Project/ODR/Project/ODR/web/Server/" + server + "/" + PART_NAME);
+                Path path3 = Paths.get(partFileName);
                 encryptedBuf = Files.readAllBytes(path3);
 
                 System.out.println(new String(encryptedBuf));
@@ -328,14 +332,17 @@ public class Fragmentation {
 
         byte fileContents[] = null;
         try {
-            String PART_NAME = id + "data" + i + ".txt";
-            Path path1 = Paths.get(Constants.KEY_FILE_LOCATION + id + ".txt");
+            String PART_NAME = id + "data" + i + Constants.TXT_FILE_EXTENSION;
+            Path path1 = Paths.get(Constants.KEY_FILE_LOCATION + id + Constants.TXT_FILE_EXTENSION);
             byte[] data = Files.readAllBytes(path1);
-            Path path = Paths.get("F:/Project/ODR/Project/ODR/web/Server/" + server + "/" + PART_NAME);
+            String partFileName = Constants.FRAGMENT_SERVER_LOCATION
+                    .replaceAll(Constants.LOCATION, server)
+                    .replaceAll(Constants.PART, PART_NAME);
+            Path path = Paths.get(partFileName);
             byte[] data1 = Files.readAllBytes(path);
             byte encFileContents[] = data1;
             Random prng1 = new Random(data);
-            Path aes = Paths.get(Constants.KEY_FILE_LOCATION + id + "aes" + i + ".txt");
+            Path aes = Paths.get(Constants.KEY_FILE_LOCATION + id + "aes" + i + Constants.TXT_FILE_EXTENSION);
             byte[] da = Files.readAllBytes(aes);
             wrappedAESKey = ntruKey.encrypt(da, prng1);
 
@@ -363,7 +370,7 @@ public class Fragmentation {
         Connection con = new ConnectionManagerDAOImpl().getConnection();
         //String sa = "select * from fileplaceing where id='" + id + "'";
         PreparedStatement pr = con.prepareStatement(Queries.SELECT_FILEPLACING_ID);
-        pr.setInt(1, id);
+        pr.setString(1, id+"");
         ResultSet rs = pr.executeQuery();
 
         String kk = "";
@@ -407,7 +414,7 @@ public class Fragmentation {
             inStream = new BufferedInputStream(new FileInputStream(willBeRead));
 
             while (totalBytesRead < FILE_SIZE) {
-                String PART_NAME = id + "data" + NUMBER_OF_CHUNKS + ".txt";
+                String PART_NAME = id + "data" + NUMBER_OF_CHUNKS + Constants.TXT_FILE_EXTENSION;
                 int bytesRemaining = FILE_SIZE - totalBytesRead;
                 if (bytesRemaining < CHUNK_SIZE) // Remaining Data Part is
                 // Smaller Than CHUNK_SIZE
@@ -431,8 +438,11 @@ public class Fragmentation {
                 encryptMessage1(ntruKeys, prng, msg, id);
                 System.out.println("Encrypted: " + new String(encryptedBuf));
                 String server = (String) lo.get(count);
+                String partFileName = Constants.FRAGMENT_SERVER_LOCATION
+                        .replaceAll(Constants.LOCATION, server)
+                        .replaceAll(Constants.PART, PART_NAME);
                 try (FileOutputStream fos = new FileOutputStream(
-                        "F:/Project/ODR/Project/ODR/web/Server/" + server + "/" + PART_NAME)) {
+                        partFileName)) {
                     fos.write(encryptedBuf);
                 }
 

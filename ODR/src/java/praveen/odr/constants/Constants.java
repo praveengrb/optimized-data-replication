@@ -23,5 +23,18 @@ public class Constants {
 
     public static final String FILE_BKP_LOCATION = "./";
     
-    public static String SUCCESS="Success";
+    public static final String SUCCESS="Success";
+    
+    public static final String TXT_FILE_EXTENSION=".txt";
+    
+   //private static final String FILENAME_KEY="<FILENAME>";
+    
+    public static final String DOWNLOAD_FILE_LOCATION="F:/Project/ODR/Project/ODR/web/Download/%s"+TXT_FILE_EXTENSION;
+    
+    public static final String LOCATION="<LOC>";
+    
+    public static final String PART="<PART>";
+    public static final String FRAGMENT_SERVER_PATH="F:/Project/ODR/Project/ODR/web/Server/";
+    public static final String FRAGMENT_SERVER_LOCATION=FRAGMENT_SERVER_PATH+LOCATION+"/"+PART;
+    
 }

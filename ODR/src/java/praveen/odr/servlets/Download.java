@@ -38,6 +38,7 @@ import praveen.odr.encypt.Random;
 import praveen.odr.encrypt.NtruEncryptKey;
 
 import praveen.odr.constants.Constants;
+import praveen.odr.constants.Queries;
 import praveen.odr.dao.impl.ConnectionManagerDAOImpl;
 
 /**
@@ -73,15 +74,19 @@ public class Download extends HttpServlet {
         System.out.println(name);
 
         Connection con = new ConnectionManagerDAOImpl().getConnection();
-        String sa = "select * from fileplaceing where id='" + name + "'";
-        PreparedStatement pr = con.prepareStatement(sa);
+       // String sa = "select * from fileplaceing where id='" + name + "'";
+        PreparedStatement pr = con.prepareStatement(Queries.SELECT_FILEPLACING_ID);
+        pr.setString(1,name);
         ResultSet rs = pr.executeQuery();
         String kk = "";
         String decrypted = "";
-        PrintWriter writer1 = new PrintWriter("F:/Project/ODR/Project/ODR/web/Download/" + name + ".txt");//F:\Project\ODR\Project\ODR\web
+        //PrintWriter writer1 = new PrintWriter("F:/Project/ODR/Project/ODR/web/Download/" + name + ".txt");
+
+        PrintWriter writer1 = new PrintWriter(String.format(Constants.DOWNLOAD_FILE_LOCATION, name));//F:\Project\ODR\Project\ODR\web
         writer1.print("");
         writer1.close();
-        FileWriter writer = new FileWriter("F:/Project/ODR/Project/ODR/web/Download/" + name + ".txt", true);
+        // FileWriter writer = new FileWriter("F:/Project/ODR/Project/ODR/web/Download/" + name + ".txt", true);
+        FileWriter writer = new FileWriter(String.format(Constants.DOWNLOAD_FILE_LOCATION, name), true);
 
         if (rs.next()) {
             kk = rs.getString(2);
@@ -92,13 +97,16 @@ public class Download extends HttpServlet {
         int i = 0;
         for (String k : hj) {
 
-            String PART_NAME = name + "data" + i + ".txt";
+            String PART_NAME = name + "data" + i + Constants.TXT_FILE_EXTENSION;
 
-            Path path1 = Paths.get(Constants.KEY_FILE_LOCATION + name + ".txt");
+            Path path1 = Paths.get(Constants.KEY_FILE_LOCATION + name + Constants.TXT_FILE_EXTENSION);
             byte[] data = Files.readAllBytes(path1);
             System.out.println(new String(data));
             System.out.println(k);
-            Path path3 = Paths.get("F:/Project/ODR/Project/ODR/web/Server/" + k + "/" + PART_NAME);
+            String partFileName = Constants.FRAGMENT_SERVER_LOCATION
+                    .replaceAll(Constants.LOCATION, k)
+                    .replaceAll(Constants.PART, PART_NAME);
+            Path path3 = Paths.get(partFileName);
             encryptedBuf = Files.readAllBytes(path3);
 
             System.out.println(new String(encryptedBuf));
@@ -125,7 +133,8 @@ public class Download extends HttpServlet {
 
         writer.close();
 
-        String param1 = "F:/Project/ODR/Project/ODR/web/Download/" + name + ".txt";
+        //String param1 = "F:/Project/ODR/Project/ODR/web/Download/" + name + ".txt";
+        String param1 = String.format(Constants.DOWNLOAD_FILE_LOCATION, name);
         // reads input file from an absolute path
         String filePath = param1;
         File downloadFile = new File(filePath);
@@ -207,17 +216,20 @@ public class Download extends HttpServlet {
         byte fileContents[] = null;
         try {
 
-            String PART_NAME = id + "data" + i + ".txt";
-            Path path1 = Paths.get(Constants.KEY_FILE_LOCATION + id + ".txt");
+            String PART_NAME = id + "data" + i + Constants.TXT_FILE_EXTENSION;
+            Path path1 = Paths.get(Constants.KEY_FILE_LOCATION + id + Constants.TXT_FILE_EXTENSION);
             byte[] data = Files.readAllBytes(path1);
-            Path path = Paths.get("F:/Project/ODR/Project/ODR/web/Server/" + server + "/" + PART_NAME);
+            String partFileName = Constants.FRAGMENT_SERVER_LOCATION
+                    .replaceAll(Constants.LOCATION, server)
+                    .replaceAll(Constants.PART, PART_NAME);
+            Path path = Paths.get(partFileName);
             byte[] data1 = Files.readAllBytes(path);
             byte encFileContents[] = data1;
             Random prng1 = new Random(data);
-            Path aes = Paths.get(Constants.KEY_FILE_LOCATION + id + "aes" + i + ".txt");
+            Path aes = Paths.get(Constants.KEY_FILE_LOCATION + id + "aes" + i + Constants.TXT_FILE_EXTENSION);
             byte[] da = Files.readAllBytes(aes);
             wrappedAESKey = ntruKey.encrypt(da, prng1);
-            Path path3 = Paths.get(Constants.KEY_FILE_LOCATION + id + "iv" + i + ".txt");
+            Path path3 = Paths.get(Constants.KEY_FILE_LOCATION + id + "iv" + i + Constants.TXT_FILE_EXTENSION);
             ivBytes = Files.readAllBytes(path3);
 
             IvParameterSpec iv = new IvParameterSpec(ivBytes);

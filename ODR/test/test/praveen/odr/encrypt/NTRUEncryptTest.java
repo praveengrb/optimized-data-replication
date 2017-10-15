@@ -22,6 +22,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import java.io.*;
 import java.util.ArrayList;
+import praveen.odr.constants.Constants;
 
 /**
  *
@@ -71,7 +72,7 @@ public class NTRUEncryptTest {
             inStream = new BufferedInputStream(new FileInputStream(willBeRead));
 
             while (totalBytesRead < FILE_SIZE) {
-                String PART_NAME = "data" + NUMBER_OF_CHUNKS + ".txt";
+                String PART_NAME = "data" + NUMBER_OF_CHUNKS + Constants.TXT_FILE_EXTENSION;
                 int bytesRemaining = FILE_SIZE - totalBytesRead;
                 if (bytesRemaining < CHUNK_SIZE) // Remaining Data Part is Smaller Than CHUNK_SIZE
                 // CHUNK_SIZE is assigned to remain volume
