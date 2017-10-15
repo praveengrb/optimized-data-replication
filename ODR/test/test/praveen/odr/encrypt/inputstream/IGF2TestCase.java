@@ -1,6 +1,6 @@
 package test.praveen.odr.encrypt.inputstream;
 
-import com.securityinnovation.jNeo.inputstream.IGF2;
+import praveen.odr.encrypt.inputstream.IGF2;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

@@ -1,11 +1,11 @@
 package test.praveen.odr.encrypt;
 
-import com.securityinnovation.jNeo.NtruException;
-import com.securityinnovation.jNeo.OID;
-import com.securityinnovation.jNeo.Random;
-import com.securityinnovation.jNeo.RandomExtractor;
-import com.securityinnovation.jNeo.inputstream.X982Drbg;
-import com.securityinnovation.jNeo.ntruencrypt.NtruEncryptKey;
+import praveen.odr.encrypt.exceptions.NtruException;
+import praveen.odr.encypt.OID;
+import praveen.odr.encypt.Random;
+import praveen.odr.encypt.RandomExtractor;
+import praveen.odr.encrypt.inputstream.X982Drbg;
+import praveen.odr.encrypt.NtruEncryptKey;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;

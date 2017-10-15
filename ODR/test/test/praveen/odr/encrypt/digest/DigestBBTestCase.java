@@ -1,6 +1,6 @@
 package test.praveen.odr.encrypt.digest;
 
-import com.securityinnovation.jNeo.digest.Sha1;
+import praveen.odr.encrypt.digest.Sha1;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

@@ -5,13 +5,13 @@ import java.util.Arrays;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.securityinnovation.jNeo.OID;
-import com.securityinnovation.jNeo.OIDMap;
-import com.securityinnovation.jNeo.NtruException;
-import com.securityinnovation.jNeo.ParamSetNotSupportedException;
-import com.securityinnovation.jNeo.math.FullPolynomial;
-import com.securityinnovation.jNeo.ntruencrypt.KeyParams;
-import com.securityinnovation.jNeo.ntruencrypt.encoder.KeyFormatterUtil;
+import praveen.odr.encypt.OID;
+import praveen.odr.encypt.OIDMap;
+import praveen.odr.encrypt.exceptions.NtruException;
+import praveen.odr.encrypt.exceptions.ParamSetNotSupportedException;
+import praveen.odr.encrypt.math.FullPolynomial;
+import praveen.odr.encrypt.KeyParams;
+import praveen.odr.encrypt.encoder.KeyFormatterUtil;
 import test.praveen.odr.encrypt.NtruEncryptTestVector;
 
 

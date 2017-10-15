@@ -5,17 +5,17 @@ import java.util.Arrays;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.securityinnovation.jNeo.OID;
-import com.securityinnovation.jNeo.Random;
-import com.securityinnovation.jNeo.NtruException;
-import com.securityinnovation.jNeo.CiphertextBadLengthException;
-import com.securityinnovation.jNeo.PlaintextBadLengthException;
-import com.securityinnovation.jNeo.DecryptionFailureException;
-import com.securityinnovation.jNeo.NoPrivateKeyException;
-import com.securityinnovation.jNeo.ObjectClosedException;
-import com.securityinnovation.jNeo.FormatNotSupportedException;
-import com.securityinnovation.jNeo.ParamSetNotSupportedException;
-import com.securityinnovation.jNeo.ntruencrypt.NtruEncryptKey;
+import praveen.odr.encypt.OID;
+import praveen.odr.encypt.Random;
+import praveen.odr.encrypt.exceptions.NtruException;
+import praveen.odr.encrypt.exceptions.CiphertextBadLengthException;
+import praveen.odr.encrypt.exceptions.PlaintextBadLengthException;
+import praveen.odr.encrypt.exceptions.DecryptionFailureException;
+import praveen.odr.encrypt.exceptions.NoPrivateKeyException;
+import praveen.odr.encrypt.exceptions.ObjectClosedException;
+import praveen.odr.encrypt.exceptions.FormatNotSupportedException;
+import praveen.odr.encrypt.exceptions.ParamSetNotSupportedException;
+import praveen.odr.encrypt.NtruEncryptKey;
 import test.praveen.odr.encrypt.NtruEncryptTestVector;
 
 

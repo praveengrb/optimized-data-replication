@@ -1,11 +1,11 @@
 package test.praveen.odr.encrypt.inputstream;
 
-import com.securityinnovation.jNeo.inputstream.X982Drbg;
+import praveen.odr.encrypt.inputstream.X982Drbg;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 
-import static com.securityinnovation.jNeo.digest.DigestAlgorithm.*;
+import static praveen.odr.encrypt.digest.DigestAlgorithm.*;
 
 
 public class X982DrbgTestCase {

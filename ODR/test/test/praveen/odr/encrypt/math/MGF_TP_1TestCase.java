@@ -1,7 +1,7 @@
 package test.praveen.odr.encrypt.math;
 
-import com.securityinnovation.jNeo.math.FullPolynomial;
-import com.securityinnovation.jNeo.math.MGF_TP_1;
+import praveen.odr.encrypt.math.FullPolynomial;
+import praveen.odr.encrypt.math.MGF_TP_1;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 

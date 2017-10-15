@@ -33,10 +33,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.securityinnovation.jNeo.NtruException;
-import com.securityinnovation.jNeo.OID;
-import com.securityinnovation.jNeo.Random;
-import com.securityinnovation.jNeo.ntruencrypt.NtruEncryptKey;
+import praveen.odr.encrypt.exceptions.NtruException;
+import praveen.odr.encypt.OID;
+import praveen.odr.encypt.Random;
+import praveen.odr.encrypt.NtruEncryptKey;
 
 import praveen.odr.constants.Constants;
 

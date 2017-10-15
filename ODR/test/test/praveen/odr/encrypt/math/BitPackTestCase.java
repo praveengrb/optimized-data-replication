@@ -1,6 +1,6 @@
 package test.praveen.odr.encrypt.math;
 
-import com.securityinnovation.jNeo.math.BitPack;
+import praveen.odr.encrypt.math.BitPack;
 import java.util.Arrays;
 
 import org.junit.Test;

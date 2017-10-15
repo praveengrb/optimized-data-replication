@@ -1,7 +1,7 @@
 package test.praveen.odr.encrypt;
 
-import com.securityinnovation.jNeo.OID;
-import com.securityinnovation.jNeo.OIDMap;
+import praveen.odr.encypt.OID;
+import praveen.odr.encypt.OIDMap;
 
 public class NtruEncryptTestVector
 {

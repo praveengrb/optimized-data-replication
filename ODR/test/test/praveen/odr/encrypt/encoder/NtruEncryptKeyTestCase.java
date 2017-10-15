@@ -5,11 +5,11 @@ import java.io.ByteArrayInputStream;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.securityinnovation.jNeo.OID;
-import com.securityinnovation.jNeo.NtruException;
-import com.securityinnovation.jNeo.math.FullPolynomial;
-import com.securityinnovation.jNeo.ntruencrypt.KeyParams;
-import com.securityinnovation.jNeo.ntruencrypt.NtruEncryptKey;
+import praveen.odr.encypt.OID;
+import praveen.odr.encrypt.exceptions.NtruException;
+import praveen.odr.encrypt.math.FullPolynomial;
+import praveen.odr.encrypt.KeyParams;
+import praveen.odr.encrypt.NtruEncryptKey;
 import test.praveen.odr.encrypt.NtruEncryptTestVector;
 
 public class NtruEncryptKeyTestCase {

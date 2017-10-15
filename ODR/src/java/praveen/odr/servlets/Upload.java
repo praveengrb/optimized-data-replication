@@ -5,7 +5,7 @@
  */
 package praveen.odr.servlets;
 
-import com.securityinnovation.jNeo.NtruException;
+import praveen.odr.encrypt.exceptions.NtruException;
 
 import praveen.odr.constants.Constants;
 
@@ -65,7 +65,7 @@ public class Upload extends HttpServlet {
 	 *             if an I/O error occurs
 	 * @throws java.lang.ClassNotFoundException
 	 * @throws java.sql.SQLException
-	 * @throws com.securityinnovation.jNeo.NtruException
+	 * @throws praveen.odr.encrypt.exceptions.NtruException
 	 * @throws java.lang.InstantiationException
 	 * @throws java.lang.IllegalAccessException
 	 */

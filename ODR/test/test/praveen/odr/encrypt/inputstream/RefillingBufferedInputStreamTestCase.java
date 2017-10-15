@@ -1,6 +1,6 @@
 package test.praveen.odr.encrypt.inputstream;
 
-import com.securityinnovation.jNeo.inputstream.RefillingBufferedInputStream;
+import praveen.odr.encrypt.inputstream.RefillingBufferedInputStream;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

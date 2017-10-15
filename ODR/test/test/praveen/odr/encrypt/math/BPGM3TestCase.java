@@ -5,11 +5,11 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import test.praveen.odr.encrypt.NtruEncryptTestVector;
-import com.securityinnovation.jNeo.ParamSetNotSupportedException;
-import com.securityinnovation.jNeo.ntruencrypt.KeyParams;
-import com.securityinnovation.jNeo.inputstream.IGF2;
-import com.securityinnovation.jNeo.math.BPGM3;
-import com.securityinnovation.jNeo.math.FullPolynomial;
+import praveen.odr.encrypt.exceptions.ParamSetNotSupportedException;
+import praveen.odr.encrypt.KeyParams;
+import praveen.odr.encrypt.inputstream.IGF2;
+import praveen.odr.encrypt.math.BPGM3;
+import praveen.odr.encrypt.math.FullPolynomial;
 
 
 public class BPGM3TestCase {

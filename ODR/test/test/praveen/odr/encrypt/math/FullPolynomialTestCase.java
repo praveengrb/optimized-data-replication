@@ -3,9 +3,9 @@ package test.praveen.odr.encrypt.math;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.securityinnovation.jNeo.ParamSetNotSupportedException;
-import com.securityinnovation.jNeo.math.FullPolynomial;
-import com.securityinnovation.jNeo.ntruencrypt.KeyParams;
+import praveen.odr.encrypt.exceptions.ParamSetNotSupportedException;
+import praveen.odr.encrypt.math.FullPolynomial;
+import praveen.odr.encrypt.KeyParams;
 import test.praveen.odr.encrypt.NtruEncryptTestVector;
 
 

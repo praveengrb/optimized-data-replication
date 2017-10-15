@@ -9,7 +9,7 @@
 
 package test.praveen.odr.encrypt.digest;
 
-import com.securityinnovation.jNeo.digest.Sha256;
+import praveen.odr.encrypt.digest.Sha256;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

@@ -6,15 +6,15 @@ import java.util.Arrays;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.securityinnovation.jNeo.NtruException;
-import com.securityinnovation.jNeo.ParamSetNotSupportedException;
-import com.securityinnovation.jNeo.math.BitPack;
-import com.securityinnovation.jNeo.math.FullPolynomial;
-import com.securityinnovation.jNeo.ntruencrypt.KeyParams;
-import com.securityinnovation.jNeo.ntruencrypt.encoder.NtruEncryptKeyNativeEncoder;
+import praveen.odr.encrypt.exceptions.NtruException;
+import praveen.odr.encrypt.exceptions.ParamSetNotSupportedException;
+import praveen.odr.encrypt.math.BitPack;
+import praveen.odr.encrypt.math.FullPolynomial;
+import praveen.odr.encrypt.KeyParams;
+import praveen.odr.encrypt.encoder.NtruEncryptKeyNativeEncoder;
 import com.securityinnovation.jNeo.ntruencrypt.encoder.PubKeyFormatter;
-import com.securityinnovation.jNeo.ntruencrypt.encoder.PubKeyFormatter_PUBLIC_KEY_v1;
-import com.securityinnovation.jNeo.ntruencrypt.encoder.RawKeyData;
+import praveen.odr.encrypt.encoder.PubKeyFormatter_PUBLIC_KEY_v1;
+import praveen.odr.encrypt.encoder.RawKeyData;
 import test.praveen.odr.encrypt.NtruEncryptTestVector;
 
 

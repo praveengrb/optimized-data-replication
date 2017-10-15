@@ -1,10 +1,10 @@
 package test.praveen.odr.encrypt.inputstream;
 
-import com.securityinnovation.jNeo.inputstream.MGF1;
+import praveen.odr.encrypt.inputstream.MGF1;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import static com.securityinnovation.jNeo.digest.DigestAlgorithm.*;
+import static praveen.odr.encrypt.digest.DigestAlgorithm.*;
 
 
 public class MGF1TestCase {
