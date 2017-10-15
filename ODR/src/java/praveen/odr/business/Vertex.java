@@ -1,4 +1,4 @@
-package praveen.odr.servlets;
+package praveen.odr.business;
 
 /**
  *
@@ -15,6 +15,7 @@ class Vertex implements Comparable<Vertex> {
         name = argName;
     }
 
+    @Override
     public String toString() {
         return name;
     }

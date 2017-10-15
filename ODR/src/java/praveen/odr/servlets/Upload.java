@@ -5,6 +5,7 @@
  */
 package praveen.odr.servlets;
 
+import praveen.odr.business.Centrality;
 import praveen.odr.encrypt.exceptions.NtruException;
 
 import praveen.odr.constants.Constants;
@@ -157,7 +158,7 @@ public class Upload extends HttpServlet {
 
 			Centrality.fragmentation(15, id);
 
-			nameList = praveen.odr.servlets.Fragmentation.readAndFragment(hh, filesize, id);
+			nameList = praveen.odr.business.Fragmentation.readAndFragment(hh, filesize, id);
 			String placeing = "";
 			String replaceing = "";
 			for (int i = 0; i < nameList.size(); i++) {
@@ -168,7 +169,7 @@ public class Upload extends HttpServlet {
 				}
 
 			}
-			nameList1 = praveen.odr.servlets.Fragmentation.readAndFragment1(hh, filesize, id);
+			nameList1 = praveen.odr.business.Fragmentation.readAndFragment1(hh, filesize, id);
 			for (int i = 0; i < nameList1.size(); i++) {
 				if (nameList1.size() - 1 == i) {
 					replaceing = replaceing + nameList1.get(i);
