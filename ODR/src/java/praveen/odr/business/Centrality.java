@@ -9,7 +9,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,6 +26,8 @@ import praveen.odr.constants.Constants;
 
 import java.util.Random;
 import java.util.Set;
+import praveen.odr.constants.Queries;
+import praveen.odr.dao.impl.ConnectionManagerDAOImpl;
 
 /**
  *
@@ -64,13 +65,8 @@ public class Centrality {
 
         HashMap<String, Integer> result = new HashMap<>();
 
-        Class.forName(Constants.DRIVER_NAME).newInstance();
-
-        Connection con = (Connection) DriverManager.getConnection(Constants.DATABASE_URL, Constants.DATABASE_USERNAME,
-				Constants.DATABASE_PASSWORD);
-
-        String sa = "select * from servernode";
-        PreparedStatement pr = con.prepareStatement(sa);
+        Connection con = new ConnectionManagerDAOImpl().getConnection();
+        PreparedStatement pr = con.prepareStatement(Queries.SELECT_SERVERNODE);
         ResultSet rs = pr.executeQuery();
 
         while (rs.next()) {
@@ -189,8 +185,9 @@ public class Centrality {
 
                 String gg1 = String.valueOf(entry1.getValue());
                 id = Integer.parseInt(entry1.getKey());
-                String sa1 = "select * from servernode where id='" + id + "'";
-                PreparedStatement pr1 = con.prepareStatement(sa1);
+                //String sa1 = "select * from servernode where id='" + id + "'";
+                PreparedStatement pr1 = con.prepareStatement(Queries.SELECT_SERVERNODE_BYID);
+                pr1.setInt(1, id);
                 ResultSet rs1 = pr1.executeQuery();
 
                 if (rs1.next()) {
@@ -206,8 +203,8 @@ public class Centrality {
                     segment.add(id);
                     capacity = capacity - 10;
 
-                    String query = "update servernode set capacity = '" + capacity + "' where id ='" + id + "'";
-                    PreparedStatement preparedStmt = con.prepareStatement(query);
+                    //String query = "update servernode set capacity = '" + capacity + "' where id ='" + id + "'";
+                    PreparedStatement preparedStmt = con.prepareStatement(Queries.UPDATE_SERVERNODE_BYID);
 
                     preparedStmt.executeUpdate();
 
@@ -248,8 +245,8 @@ public class Centrality {
 
                 String gg1 = String.valueOf(entry1.getValue());
                 id = Integer.parseInt(entry1.getKey());
-                String sa1 = "select * from servernode where id='" + id + "'";
-                PreparedStatement pr1 = con.prepareStatement(sa1);
+                PreparedStatement pr1 = con.prepareStatement(Queries.SELECT_SERVERNODE_BYID);
+                pr1.setInt(1, id);
                 ResultSet rs1 = pr1.executeQuery();
 
                 if (rs1.next()) {
@@ -266,9 +263,10 @@ public class Centrality {
 
                     capacity = capacity - 10;
                     segment.add(id);
-                    String query = "update servernode set capacity = '" + capacity + "' where id ='" + id + "'";
-                    PreparedStatement preparedStmt = con.prepareStatement(query);
-
+                    //String query = "update servernode set capacity = '" + capacity + "' where id ='" + id + "'";
+                    PreparedStatement preparedStmt = con.prepareStatement(Queries.UPDATE_SERVERNODE_BYID);
+                    preparedStmt.setInt(1, capacity);
+                    preparedStmt.setInt(2, id);
                     preparedStmt.executeUpdate();
 
                     for (int jk = 0; jk <= nodecount; jk++) {
@@ -288,9 +286,13 @@ public class Centrality {
             }
         }
 
-        String sql = "insert into fileplaceing (id,location,replacing)values('" + fid + "','" + placeing + "','" + replaceing + "')";
-        Statement st = con.createStatement();
-        st.executeUpdate(sql);
+        //String sql = "insert into fileplaceing (id,location,replacing)values('" + fid + "','" + placeing + "','" + replaceing + "')";
+        PreparedStatement st = con.prepareStatement(Queries.INSERT_FILEPLACING);
+        //int size, int fid,String placeing = "";String replaceing = "";
+        st.setInt(1, fid);
+        st.setString(2,placeing);
+        st.setString(3,replaceing);
+        st.executeUpdate();
 
     }
     static int h = 0;
@@ -318,7 +320,7 @@ public class Centrality {
         if (h < 20) {
             totlanumberofsp = totlanumberofsp + 1;
             h = h + 1;
-            for (Object fg1 : fg) {
+            for (String fg1 : fg) {
                 if (fg1.equals(node)) {
                     count = count + 1;
                 }

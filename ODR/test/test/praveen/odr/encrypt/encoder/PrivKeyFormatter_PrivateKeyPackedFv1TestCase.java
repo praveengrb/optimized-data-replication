@@ -10,7 +10,6 @@ import praveen.odr.encrypt.exceptions.ParamSetNotSupportedException;
 import praveen.odr.encrypt.math.FullPolynomial;
 import praveen.odr.encrypt.KeyParams;
 import praveen.odr.encrypt.encoder.NtruEncryptKeyNativeEncoder;
-import com.securityinnovation.jNeo.ntruencrypt.encoder.PrivKeyFormatter;
 import praveen.odr.encrypt.encoder.PrivKeyFormatter_PrivateKeyPackedFv1;
 import praveen.odr.encrypt.encoder.RawKeyData;
 import test.praveen.odr.encrypt.NtruEncryptTestVector;

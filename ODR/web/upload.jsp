@@ -8,14 +8,14 @@
 		<title>Optimized Data Replication</title>
 		<!-- Loading third party fonts -->
 		<link href="http://fonts.googleapis.com/css?family=Roboto+Slab:300,400,700" rel="stylesheet" type="text/css">
-		<link href="fonts/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link href="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/fonts/font-awesome.min.css" rel="stylesheet" type="text/css">
 		<!-- Loading main css file -->
-		<link rel="stylesheet" href="css/animate.css">
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/css/animate.css">
+		<link rel="stylesheet" href="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/css/style.css">
 		
 		<!--[if lt IE 9]>
-		<script src="js/ie-support/html5.js"></script>
-		<script src="js/ie-support/respond.js"></script>
+		<script src="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/js/ie-support/html5.js"></script>
+		<script src="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/js/ie-support/respond.js"></script>
 		<![endif]-->
 
 	</head>
@@ -42,7 +42,7 @@
 				<div class="bottom-header">
 					<div class="container">
 						<a href="index.html" class="branding pull-left">
-							<img src="images/logo-icon.png" alt="Site title" class="logo-icon">
+							<img src="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/images/logo-icon.png" alt="Site title" class="logo-icon">
 							<h1 class="site-title">ODR<span>Cloud</span></h1> 
 							<h2 class="site-description">Confident data</h2>
 						</a> <!-- #branding -->
@@ -64,7 +64,7 @@
 					<ul class="slides">
 						<li>
 							<div class="container">
-								<img src="dummy/server.jpg" alt="">
+								<img src="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/images/server.jpg" alt="">
 								<div class="slide-caption">
 									<h2 class="slide-title">File Uploading</h2>
 									
@@ -76,7 +76,7 @@
         
                                                                             File Name <p class="wow fadeInRight"><input type="text" name="name" placeholder="File name "></p>
 										  Description <p class="wow fadeInRight"><input type="text" name="des" placeholder="Description "></p>
-										 File UPload <p class="wow fadeInRight"> <input type="file" name="files" accept=".txt">
+										 File Upload <p class="wow fadeInRight"> <input type="file" name="files" accept=".txt">
                                    </p>
 									
                                                                             <input type="submit" class="button pull-left wow fadeInLeft" value="Submit">
@@ -100,12 +100,12 @@
 						<div class="col-md-6">
 							
 							<div class=" branding">
-								<img src="images/logo-footer.png" alt="Site title" class="logo-icon">
+								<img src="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/images/logo-footer.png" alt="Site title" class="logo-icon">
 								<h1 class="site-title"><a href="#">ORD <span>Cloud</span></a></h1> 
 								<h2 class="site-description">Confident Data</h2>
 							</div> <!-- .branding -->
 
-							<p class="copy">Copyright 2017 ODRCloud. designed by ISI. All rights reserved</p>
+							<p class="copy">Praveen Sankarasubramanian ( https://www.linkedin.com/in/praveensankarasubramanian/ )</p>
 						</div>
 						
 						<div class="col-md-6 align-right">
@@ -132,9 +132,9 @@
 
 		</div> <!-- #site-content -->
 
-		<script src="js/jquery-1.11.1.min.js"></script>
-		<script src="js/plugins.js"></script>
-		<script src="js/app.js"></script>
+		<script src="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/js/jquery-1.11.1.min.js"></script>
+		<script src="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/js/plugins.js"></script>
+		<script src="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/js/app.js"></script>
 		
 	</body>
 

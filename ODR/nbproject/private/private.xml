@@ -3,10 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/src/java/djb/Curve25519.java</file>
-            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/src/java/ord/Upload.java</file>
-            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/web/js/app.js</file>
+            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/web/server.jsp</file>
+            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/src/java/praveen/odr/constants/Constants.java</file>
+            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/web/register.jsp</file>
             <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/web/upload.jsp</file>
+            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/src/java/praveen/odr/constants/Queries.java</file>
+            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/src/java/praveen/odr/dao/impl/UserManagementDAOImpl.java</file>
+            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/web/login.jsp</file>
+            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/web/user.jsp</file>
+            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/web/Admin.html</file>
+            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/web/index.html</file>
+            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/web/view.jsp</file>
+            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/web/download.jsp</file>
+            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/web/footer.html</file>
+            <file>file:/C:/Users/Praveen/Documents/GitHub/optimized-data-replication/ODR/src/java/praveen/odr/dao/impl/ConnectionManagerDAOImpl.java</file>
         </group>
     </open-files>
 </project-private>

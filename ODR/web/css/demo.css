@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'BebasNeueRegular';
-    src: url('fonts/BebasNeue-webfont.eot');
-    src: url('fonts/BebasNeue-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/BebasNeue-webfont.woff') format('woff'),
-         url('fonts/BebasNeue-webfont.ttf') format('truetype'),
-         url('fonts/BebasNeue-webfont.svg#BebasNeueRegular') format('svg');
+    src: url('https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/fonts/BebasNeue-webfont.eot');
+    src: url('https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/fonts/BebasNeue-webfont.eot?#iefix') format('embedded-opentype'),
+         url('https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/fonts/BebasNeue-webfont.woff') format('woff'),
+         url('https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/fonts/BebasNeue-webfont.ttf') format('truetype'),
+         url('https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/fonts/BebasNeue-webfont.svg#BebasNeueRegular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
