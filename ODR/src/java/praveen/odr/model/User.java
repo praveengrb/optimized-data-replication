@@ -5,12 +5,17 @@ package praveen.odr.model;
  * @author Praveen
  */
 public class User {
-    
+    int id;
     String name;
     String emailAddress;
     String password;    
     boolean admin;
-    
+    public void setId(int id){
+        this.id=id;
+    }
+    public int getId(){
+        return this.id;
+    }
     public void setAdmin(boolean admin){
         this.admin = admin;
     }
