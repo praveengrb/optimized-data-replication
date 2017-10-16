@@ -8,9 +8,6 @@ package praveen.odr.business;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,10 +24,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import praveen.odr.constants.Queries;
 import praveen.odr.dao.FilePlacementDAO;
 import praveen.odr.dao.LocationManagerDAO;
-import praveen.odr.dao.impl.ConnectionManagerDAOImpl;
 import praveen.odr.dao.impl.FilePlacementDAOImpl;
 import praveen.odr.dao.impl.LocationManagerDAOImpl;
 import praveen.odr.exception.ODRDataAccessException;
@@ -80,15 +75,6 @@ public class Centrality {
                 result.put(serverNode.getId()+"", Integer.parseInt(serverNode.getCapacity()));
                 nodecount = nodecount + 1;
             }
-            /*Connection con = new ConnectionManagerDAOImpl().getConnection();
-            PreparedStatement pr = con.prepareStatement(Queries.SELECT_SERVERNODE);
-            ResultSet rs = pr.executeQuery();
-            while (rs.next()) {
-                String jj = rs.getString(2);
-                result.put(rs.getString(1), Integer.parseInt(jj));
-                nodecount = nodecount + 1;
-            }*/
-
             List<Entry<String, Integer>> list = sortByValueInDecreasingOrder(result);
             int i = 0;
             PrintWriter writer1 = new PrintWriter(Constants.FRAGMENT_FILE_LOCATION);//F://Project
@@ -202,15 +188,6 @@ public class Centrality {
                     if (nodeById != null) {
                         capacity = Integer.parseInt(nodeById.getCapacity());
                     }
-                    //String sa1 = "select * from servernode where id='" + id + "'";
-                    /*PreparedStatement pr1 = con.prepareStatement(Queries.SELECT_SERVERNODE_BYID);
-                     pr1.setInt(1, id);
-                     ResultSet rs1 = pr1.executeQuery();
-
-                     if (rs1.next()) {
-
-                     capacity = Integer.parseInt(rs1.getString(3));
-                     }*/
                     if (capacity > 10) {
 
                         try {
@@ -236,7 +213,6 @@ public class Centrality {
                                         if (pair.equalsIgnoreCase(entry2.getKey())) {
                                             distance = entry2.getValue();
                                         }
-
                                     }
                                     si.put(pair, distance);
                                 }
@@ -265,20 +241,12 @@ public class Centrality {
                 }
 
                 if (iu < size && l == 0) {
-
                     String gg1 = String.valueOf(entry1.getValue());
                     id = Integer.parseInt(entry1.getKey());
                     ServerNode nodeById = managerDAO.getLocationById(id);
                     if (nodeById != null) {
                         capacity = Integer.parseInt(nodeById.getCapacity());
                     }
-                    /*PreparedStatement pr1 = con.prepareStatement(Queries.SELECT_SERVERNODE_BYID);
-                     pr1.setInt(1, id);
-                     ResultSet rs1 = pr1.executeQuery();
-
-                     if (rs1.next()) {
-                     capacity = Integer.parseInt(rs1.getString(3));
-                     }*/
                     if (capacity > 10) {
                         System.out.println(id);
                         replaceing = replaceing + id + ",";
@@ -289,12 +257,7 @@ public class Centrality {
                         ServerNode node = new ServerNode();
                         node.setCapacity(capacity + "");
                         node.setId(id);
-                        managerDAO.updateLocation(node);
-                        /* PreparedStatement preparedStmt = con.prepareStatement(Queries.UPDATE_SERVERNODE_BYID);
-                         preparedStmt.setInt(1, capacity);
-                         preparedStmt.setInt(2, id);
-                         preparedStmt.executeUpdate();*/
-
+                        managerDAO.updateLocation(node);                        
                         for (int jk = 0; jk <= nodecount; jk++) {
                             if (jk != id) {
                                 String pair = String.valueOf(id) + "," + String.valueOf(jk);

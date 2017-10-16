@@ -28,8 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import praveen.odr.business.UniqueFileManager;
-import praveen.odr.constants.Queries;
-import praveen.odr.dao.impl.ConnectionManagerDAOImpl;
 import praveen.odr.exception.ODRDataAccessException;
 
 /**
@@ -85,60 +83,32 @@ public class Upload extends HttpServlet {
 
         System.out.println(webAppPath);
         Part filePart = request.getPart("files");
-
         String photo = "";
-
         System.out.println(path);
-
         File file = new File(path);
         file.mkdir();
         String fileName = getFileName(filePart);
 
         OutputStream out1 = null;
-
         InputStream filecontent = null;
-
         out1 = new FileOutputStream(new File(path + File.separator + fileName));
-
         filecontent = filePart.getInputStream();
-
         int read = 0;
         final byte[] bytes = new byte[1024];
 
         while ((read = filecontent.read(bytes)) != -1) {
             out1.write(bytes, 0, read);
-
             photo = path + fileName;
-
         }
 
         try {
-            //Connection con = new ConnectionManagerDAOImpl().getConnection();
-
             String hh = ll + Constants.FILE_BKP_LOCATION + fileName;
-            /*String sql = "insert into ufile (uid,fname,des,file)values('" + u + "','" + name + "','" + des + "','" + hh
-             + "')";
-             PreparedStatement st = con.prepareStatement(Queries.INSERT_UNIQUEFILE);
-             st.setString(1, u);
-             st.setString(2, name);
-             st.setString(3, des);
-             st.setObject(4, hh);
-             st.executeUpdate();*/
             UniqueFileManager uniqueFileManager = new UniqueFileManager();
             uniqueFileManager.insertUniqueFile(u, name, des, hh);
-            //Statement st2 = con.createStatement();
-            // ResultSet rs = st2.executeQuery("SELECT id FROM ufile");
             int id = uniqueFileManager.getLUID();
-            /* if (rs.last()) {
-             id = rs.getInt("id");
-             }*/
-            // Algorithm for fragment placement
-            // Intialization
-            ArrayList<String> nameList = new ArrayList<>();
+            ArrayList<String> nameList = null;
             ArrayList<String> nameList1 = new ArrayList<>();
-            // ArrayList<String> fragmentsize = new ArrayList<>();
             ArrayList<String> color = new ArrayList<>();
-            // ArrayList<String> centrality1 = new ArrayList<>();
             color.add("open color");
             color.add("close color");
             File willBeRead = new File(hh);
@@ -172,11 +142,6 @@ public class Upload extends HttpServlet {
 
             }
             uniqueFileManager.updateFilePlacing(placeing, replaceing, id + "");
-            /*String query = "update  fileplaceing set location = '" + placeing + "' , replacing = '" + replaceing
-             + "' where id ='" + id + "'";
-             PreparedStatement preparedStmt = con.prepareStatement(query);
-
-             preparedStmt.executeUpdate();*/
         } catch (ODRDataAccessException ex) {
             Logger.getLogger(Upload.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
