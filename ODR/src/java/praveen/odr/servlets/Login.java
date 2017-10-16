@@ -57,18 +57,18 @@ public class Login extends HttpServlet {
             user.setEmailAddress(eid);
             user.setPassword(pass);
             Status<User> userDetails = userManagement.isValidUser(user);
-            if (userDetails.isDone()) {
-                request.setAttribute("id", user.getEmailAddress());
-                RequestDispatcher rd = request.getRequestDispatcher("user.jsp");
-                rd.forward(request, response);
-            } 
-            else if (eid.equalsIgnoreCase("Admin@gmail.com") && pass.equalsIgnoreCase("Admin")) {
+            if (eid.equalsIgnoreCase("Admin@gmail.com") && pass.equalsIgnoreCase("Admin")) {
             //else if (eid.equalsIgnoreCase("Admin@gmail.com") && pass.equalsIgnoreCase("Admin")) {
                 request.setAttribute("id", "Welcome Admin");
                 RequestDispatcher rd = request.getRequestDispatcher("Admin.html");
                 rd.forward(request, response);
 
-            } else {
+            } else if (userDetails.isDone()) {
+                request.setAttribute("id", user.getEmailAddress());
+                RequestDispatcher rd = request.getRequestDispatcher("user.jsp");
+                rd.forward(request, response);
+            } 
+          else {
                 request.setAttribute("mess", "Invalid Account");
                 RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
                 rd.forward(request, response);

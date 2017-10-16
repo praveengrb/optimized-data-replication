@@ -36,5 +36,7 @@ public class Queries {
     public static String ID_UIDFILE="SELECT id FROM ufile";
     
     public static String UPDATE_FILEPLACING_BYID = "update  fileplaceing set location = ? , replacing = ? where id =?";
+    
+    public static String SELECT_UFILE_BYID="select * from ufile where uid=?";
 
 }

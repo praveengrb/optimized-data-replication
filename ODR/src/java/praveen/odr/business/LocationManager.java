@@ -5,6 +5,7 @@
  */
 package praveen.odr.business;
 
+import java.util.List;
 import praveen.odr.dao.LocationManagerDAO;
 import praveen.odr.dao.impl.LocationManagerDAOImpl;
 import praveen.odr.exception.ODRDataAccessException;
@@ -22,6 +23,9 @@ public class LocationManager {
 
     public void createServer(ServerNode node) throws ODRDataAccessException{
         locationManagerDAO.createLocation(node);
+    }
+    public List<ServerNode> getLocations() throws ODRDataAccessException{
+        return locationManagerDAO.getLocations();
     }
     
 }

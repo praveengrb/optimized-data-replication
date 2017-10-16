@@ -1,8 +1,6 @@
-<%@page import="praveen.odr.constants.Queries"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.PreparedStatement"%>
-<%@page import="java.sql.Connection"%>
-<%@page import="praveen.odr.dao.impl.ConnectionManagerDAOImpl"%>
+<%@page import="praveen.odr.model.ServerNode"%>
+<%@page import="java.util.List"%>
+<%@page import="praveen.odr.business.LocationManager"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -147,29 +145,30 @@
                     <%
 
                         try {
-
-                            Connection con = new ConnectionManagerDAOImpl().getConnection();
-                            String sa = Queries.SELECT_SERVERNODE;
-                            PreparedStatement pr = con.prepareStatement(sa);
-                            ResultSet rs = pr.executeQuery();
+                            LocationManager locationsManager = new LocationManager();
+                            List<ServerNode> serverNodes=locationsManager.getLocations();
+                            //Connection con = new ConnectionManagerDAOImpl().getConnection();
+                            //String sa = Queries.SELECT_SERVERNODE;
+                            //PreparedStatement pr = con.prepareStatement(sa);
+                            //ResultSet rs = pr.executeQuery();
 
 
                     %>
 
-                    <%             while (rs.next()) {
-                            System.out.println(rs.getString(1));
+                    <%             for (ServerNode serverNode:serverNodes) {
+                            System.out.println(serverNode.getId());
                     %>
                     <tr>
 
 
 
-                        <td align="center"><%= rs.getString(1)%></td>
+                        <td align="center"><%= serverNode.getId()%></td>
 
-                        <td align="center"><%= rs.getString(2)%></td>
+                        <td align="center"><%= serverNode.getDist() %></td>
 
-                        <td align="center"><%= rs.getString(3)%></td>
+                        <td align="center"><%= serverNode.getCapacity() %></td>
 
-                        <td align="center"><%= rs.getString(4)%></td>
+                        <td align="center"><%= serverNode.getColor()%></td>
 
                     </tr>
 
