@@ -12,7 +12,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,8 +25,17 @@ import praveen.odr.constants.Constants;
 
 import java.util.Random;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import praveen.odr.constants.Queries;
+import praveen.odr.dao.FilePlacementDAO;
+import praveen.odr.dao.LocationManagerDAO;
 import praveen.odr.dao.impl.ConnectionManagerDAOImpl;
+import praveen.odr.dao.impl.FilePlacementDAOImpl;
+import praveen.odr.dao.impl.LocationManagerDAOImpl;
+import praveen.odr.exception.ODRDataAccessException;
+import praveen.odr.model.FilePlacing;
+import praveen.odr.model.ServerNode;
 
 /**
  *
@@ -38,7 +46,8 @@ public class Centrality {
     private static String START;
     private static String END;
     private static boolean flag;
-
+    private static final LocationManagerDAO managerDAO = new LocationManagerDAOImpl();
+    private static final FilePlacementDAO filePlacementDAO = new FilePlacementDAOImpl();
     public static int count = 0;
     public static int node = 0;
     public static int centr = 0;
@@ -60,240 +69,254 @@ public class Centrality {
 
     public static void fragmentation(int size, int fid) throws ClassNotFoundException, SQLException, IOException, InstantiationException, IllegalAccessException {
 
-        // write new line
-        ArrayList<?> pla = new ArrayList<>();
-
-        HashMap<String, Integer> result = new HashMap<>();
-
-        Connection con = new ConnectionManagerDAOImpl().getConnection();
-        PreparedStatement pr = con.prepareStatement(Queries.SELECT_SERVERNODE);
-        ResultSet rs = pr.executeQuery();
-
-        while (rs.next()) {
-
-            String jj = rs.getString(2);
-            result.put(rs.getString(1), Integer.parseInt(jj));
-            nodecount = nodecount + 1;
-        }
-
-        List<Entry<String, Integer>> list = sortByValueInDecreasingOrder(result);
-        int i = 0;
-        PrintWriter writer1 = new PrintWriter(Constants.FRAGMENT_FILE_LOCATION);//F://Project
-        writer1.print("");
-        writer1.close();
-        System.out.println(nodecount);
-        int cc = nodecount + 1;
-        String hj = String.valueOf(cc);
         try {
-            FileWriter writer = new FileWriter(Constants.FRAGMENT_FILE_LOCATION, true);
-            writer.write(hj);
-            writer.write("\r\n");
-            writer.write("\r\n");
-            for (Map.Entry<String, Integer> entry1 : list) {
-                String gg = (String) entry1.getKey();
-                String gg1 = String.valueOf(entry1.getValue());
 
-                i = i + 1;
-                String so = "0," + gg;
-                String so1 = gg + ",1";
-                root.put(so, Integer.parseInt(gg1));
-                root.put(so1, Integer.parseInt(gg1));
-                System.out.println(so + " ========= " + gg1);
-                //System.out.println(gg+"   ============================    "+gg1);
-                int j = 0;
-                for (Map.Entry<String, Integer> entry2 : list) {
-                    j = j + 1;
+            // write new line
+            List<?> pla = new ArrayList<>();
+            Map<String, Integer> result = new HashMap<>();
+            List<ServerNode> serverNodes = managerDAO.getLocations();
+            for (ServerNode serverNode:serverNodes) {
+               // String jj = rs.getString(2);
+                result.put(serverNode.getId()+"", Integer.parseInt(serverNode.getCapacity()));
+                nodecount = nodecount + 1;
+            }
+            /*Connection con = new ConnectionManagerDAOImpl().getConnection();
+            PreparedStatement pr = con.prepareStatement(Queries.SELECT_SERVERNODE);
+            ResultSet rs = pr.executeQuery();
+            while (rs.next()) {
+                String jj = rs.getString(2);
+                result.put(rs.getString(1), Integer.parseInt(jj));
+                nodecount = nodecount + 1;
+            }*/
 
-                    String g = (String) entry2.getKey();
-                    String g1 = String.valueOf(entry2.getValue());
-                    if (gg == null ? g != null : !gg.equals(g)) {
-                        String pair = gg + "," + g;
+            List<Entry<String, Integer>> list = sortByValueInDecreasingOrder(result);
+            int i = 0;
+            PrintWriter writer1 = new PrintWriter(Constants.FRAGMENT_FILE_LOCATION);//F://Project
+            writer1.print("");
+            writer1.close();
+            System.out.println(nodecount);
+            int cc = nodecount + 1;
+            String hj = String.valueOf(cc);
+            try {
+                FileWriter writer = new FileWriter(Constants.FRAGMENT_FILE_LOCATION, true);
+                writer.write(hj);
+                writer.write("\r\n");
+                writer.write("\r\n");
+                for (Map.Entry<String, Integer> entry1 : list) {
+                    String gg = (String) entry1.getKey();
+                    String gg1 = String.valueOf(entry1.getValue());
 
-                        int k = Integer.parseInt(gg1);
+                    i = i + 1;
+                    String so = "0," + gg;
+                    String so1 = gg + ",1";
+                    root.put(so, Integer.parseInt(gg1));
+                    root.put(so1, Integer.parseInt(gg1));
+                    System.out.println(so + " ========= " + gg1);
+                    //System.out.println(gg+"   ============================    "+gg1);
+                    int j = 0;
+                    for (Map.Entry<String, Integer> entry2 : list) {
+                        j = j + 1;
 
-                        int k1 = Integer.parseInt(g1);
-                        int distance = 0;
-                        if (k >= k1) {
-                            distance = k - k1;
-                        } else {
-                            distance = k1 - k;
+                        String g = (String) entry2.getKey();
+                        String g1 = String.valueOf(entry2.getValue());
+                        if (gg == null ? g != null : !gg.equals(g)) {
+                            String pair = gg + "," + g;
+
+                            int k = Integer.parseInt(gg1);
+
+                            int k1 = Integer.parseInt(g1);
+                            int distance = 0;
+                            if (k >= k1) {
+                                distance = k - k1;
+                            } else {
+                                distance = k1 - k;
+                            }
+                            root.put(pair, distance);
+                            writer.write(gg + " " + g + " " + distance);
+                            writer.write("\r\n");
+                            vall.put(gg, g);
+                            System.out.println(pair + " ========= " + distance);
+
                         }
-                        root.put(pair, distance);
-                        writer.write(gg + " " + g + " " + distance);
-                        writer.write("\r\n");
-                        vall.put(gg, g);
-                        System.out.println(pair + " ========= " + distance);
 
                     }
-
                 }
+                writer.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            writer.close();
+            List<Entry<String, Integer>> list1 = sortByValueInDecreasingOrder(root);
+            //centrality calculation
+            for (int jk = 1; jk <= nodecount; jk++) {
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        List<Entry<String, Integer>> list1 = sortByValueInDecreasingOrder(root);
-        //centrality calculation  
-        for (int jk = 1; jk <= nodecount; jk++) {
+                centr = 0;
+                node = jk;
+                for (Map.Entry<String, String> entry1 : vall.entrySet()) {
+                    count = 0;
+                    h = 0;
+                    totlanumberofsp = 0;
+                    START = (String) entry1.getKey();
+                    END = String.valueOf(entry1.getValue());
+                    LinkedList<String> visited = new LinkedList<>();
+                    visited.add(START);
+                    Random randomGenerator = new Random();
+                    totlanumberofsp = randomGenerator.nextInt(100);
+                    count = randomGenerator.nextInt(100);
 
-            centr = 0;
-            node = jk;
-            for (Map.Entry<String, String> entry1 : vall.entrySet()) {
-                count = 0;
-                h = 0;
-                totlanumberofsp = 0;
-                START = (String) entry1.getKey();
-                END = String.valueOf(entry1.getValue());
-                LinkedList<String> visited = new LinkedList<>();
-                visited.add(START);
+                    if (totlanumberofsp > count) {
+                        if (totlanumberofsp > 0 && count > 0) {
+                            centr = centr + (totlanumberofsp / count);
+                        }
+                    } else {
+                        if (totlanumberofsp > 0 && count > 0) {
+                            centr = centr + (count / totlanumberofsp);
+                        }
+                    }
+                }
                 Random randomGenerator = new Random();
-                totlanumberofsp = randomGenerator.nextInt(100);
-                count = randomGenerator.nextInt(100);
+                read = randomGenerator.nextInt(50);
+                write = randomGenerator.nextInt(50);
+                int readwrite = read + write;
+                cen.put(String.valueOf(node), centr);
+                repli.put(String.valueOf(node), readwrite);
 
-                if (totlanumberofsp > count) {
-                    if (totlanumberofsp > 0 && count > 0) {
-                        centr = centr + (totlanumberofsp / count);
-                    }
-                } else {
-                    if (totlanumberofsp > 0 && count > 0) {
-                        centr = centr + (count / totlanumberofsp);
-                    }
-                }
+                System.out.println(totlanumberofsp + "== " + count + ";;;;;;" + node + "............" + centr);
             }
-            Random randomGenerator = new Random();
-            read = randomGenerator.nextInt(50);
-            write = randomGenerator.nextInt(50);
-            int readwrite = read + write;
-            cen.put(String.valueOf(node), centr);
-            repli.put(String.valueOf(node), readwrite);
+            //file fragementation
 
-            System.out.println(totlanumberofsp + "== " + count + ";;;;;;" + node + "............" + centr);
-        }
-        //file fragementation
+            int capacity = 0;
+            int id = 0;
 
-        int capacity = 0;
-        int id = 0;
+            String placeing = "";
 
-        String placeing = "";
+            List<Entry<String, Integer>> list2 = sortByValueInDecreasingOrder(cen);
 
-        List<Entry<String, Integer>> list2 = sortByValueInDecreasingOrder(cen);
+            int iu = 0;
+            for (Map.Entry<String, Integer> entry1 : list2) {
+                if (iu < size) {
 
-        int iu = 0;
-        for (Map.Entry<String, Integer> entry1 : list2) {
-            if (iu < size) {
+                    String gg1 = String.valueOf(entry1.getValue());
+                    id = Integer.parseInt(entry1.getKey());
+                    ServerNode nodeById = managerDAO.getLocationById(id);
+                    if (nodeById != null) {
+                        capacity = Integer.parseInt(nodeById.getCapacity());
+                    }
+                    //String sa1 = "select * from servernode where id='" + id + "'";
+                    /*PreparedStatement pr1 = con.prepareStatement(Queries.SELECT_SERVERNODE_BYID);
+                     pr1.setInt(1, id);
+                     ResultSet rs1 = pr1.executeQuery();
 
-                String gg1 = String.valueOf(entry1.getValue());
-                id = Integer.parseInt(entry1.getKey());
-                //String sa1 = "select * from servernode where id='" + id + "'";
-                PreparedStatement pr1 = con.prepareStatement(Queries.SELECT_SERVERNODE_BYID);
-                pr1.setInt(1, id);
-                ResultSet rs1 = pr1.executeQuery();
+                     if (rs1.next()) {
 
-                if (rs1.next()) {
+                     capacity = Integer.parseInt(rs1.getString(3));
+                     }*/
+                    if (capacity > 10) {
 
-                    capacity = Integer.parseInt(rs1.getString(3));
-                }
-                if (capacity > 10) {
+                        try {
+                            System.out.println(id);
 
-                    System.out.println(id);
+                            placeing = placeing + id + ",";
+                            iu = iu + 1;
+                            segment.add(id);
+                            capacity = capacity - 10;
 
-                    placeing = placeing + id + ",";
-                    iu = iu + 1;
-                    segment.add(id);
-                    capacity = capacity - 10;
+                            //String query = "update servernode set capacity = '" + capacity + "' where id ='" + id + "'";
+                            ServerNode serverNode = new ServerNode();
+                            serverNode.setCapacity(capacity + "");
+                            serverNode.setId(id);
 
-                    //String query = "update servernode set capacity = '" + capacity + "' where id ='" + id + "'";
-                    PreparedStatement preparedStmt = con.prepareStatement(Queries.UPDATE_SERVERNODE_BYID);
-                    preparedStmt.setString(1, capacity+"");
-                    preparedStmt.setString(2, id+"");
-                    preparedStmt.executeUpdate();
+                            managerDAO.updateLocation(serverNode);
 
-                    for (int jk = 0; jk <= nodecount; jk++) {
-                        if (jk != id) {
-                            String pair = String.valueOf(id) + "," + String.valueOf(jk);
-                            int distance = 0;
-                            for (Map.Entry<String, Integer> entry2 : root.entrySet()) {
-                                if (pair.equalsIgnoreCase(entry2.getKey())) {
-                                    distance = entry2.getValue();
+                            for (int jk = 0; jk <= nodecount; jk++) {
+                                if (jk != id) {
+                                    String pair = String.valueOf(id) + "," + String.valueOf(jk);
+                                    int distance = 0;
+                                    for (Map.Entry<String, Integer> entry2 : root.entrySet()) {
+                                        if (pair.equalsIgnoreCase(entry2.getKey())) {
+                                            distance = entry2.getValue();
+                                        }
+
+                                    }
+                                    si.put(pair, distance);
                                 }
-
                             }
-                            si.put(pair, distance);
+                        } catch (ODRDataAccessException ex) {
+                            Logger.getLogger(Centrality.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }
             }
-        }
-        //file replication
+            //file replication
 
-        String replaceing = "";
+            String replaceing = "";
 
-        List<Entry<String, Integer>> list3 = sortByValueInDecreasingOrder(repli);
+            List<Entry<String, Integer>> list3 = sortByValueInDecreasingOrder(repli);
 
-        iu = 0;
-        for (Map.Entry<String, Integer> entry1 : list3) {
-            id = Integer.parseInt(entry1.getKey());
-            int l = 0;
-            for (Object segment1 : segment) {
-                int hkk = Integer.parseInt(segment1.toString());
-                if (hkk == id) {
-                    l = 1;
-                }
-            }
-
-            if (iu < size && l == 0) {
-
-                String gg1 = String.valueOf(entry1.getValue());
+            iu = 0;
+            for (Map.Entry<String, Integer> entry1 : list3) {
                 id = Integer.parseInt(entry1.getKey());
-                PreparedStatement pr1 = con.prepareStatement(Queries.SELECT_SERVERNODE_BYID);
-                pr1.setInt(1, id);
-                ResultSet rs1 = pr1.executeQuery();
-
-                if (rs1.next()) {
-
-                    capacity = Integer.parseInt(rs1.getString(3));
+                int l = 0;
+                for (Object segment1 : segment) {
+                    int hkk = Integer.parseInt(segment1.toString());
+                    if (hkk == id) {
+                        l = 1;
+                    }
                 }
-                if (capacity > 10) {
 
-                    System.out.println(id);
+                if (iu < size && l == 0) {
 
-                    replaceing = replaceing + id + ",";
+                    String gg1 = String.valueOf(entry1.getValue());
+                    id = Integer.parseInt(entry1.getKey());
+                    ServerNode nodeById = managerDAO.getLocationById(id);
+                    if (nodeById != null) {
+                        capacity = Integer.parseInt(nodeById.getCapacity());
+                    }
+                    /*PreparedStatement pr1 = con.prepareStatement(Queries.SELECT_SERVERNODE_BYID);
+                     pr1.setInt(1, id);
+                     ResultSet rs1 = pr1.executeQuery();
 
-                    iu = iu + 1;
+                     if (rs1.next()) {
+                     capacity = Integer.parseInt(rs1.getString(3));
+                     }*/
+                    if (capacity > 10) {
+                        System.out.println(id);
+                        replaceing = replaceing + id + ",";
+                        iu = iu + 1;
+                        capacity = capacity - 10;
+                        segment.add(id);
+                        //String query = "update servernode set capacity = '" + capacity + "' where id ='" + id + "'";
+                        ServerNode node = new ServerNode();
+                        node.setCapacity(capacity + "");
+                        node.setId(id);
+                        managerDAO.updateLocation(node);
+                        /* PreparedStatement preparedStmt = con.prepareStatement(Queries.UPDATE_SERVERNODE_BYID);
+                         preparedStmt.setInt(1, capacity);
+                         preparedStmt.setInt(2, id);
+                         preparedStmt.executeUpdate();*/
 
-                    capacity = capacity - 10;
-                    segment.add(id);
-                    //String query = "update servernode set capacity = '" + capacity + "' where id ='" + id + "'";
-                    PreparedStatement preparedStmt = con.prepareStatement(Queries.UPDATE_SERVERNODE_BYID);
-                    preparedStmt.setInt(1, capacity);
-                    preparedStmt.setInt(2, id);
-                    preparedStmt.executeUpdate();
+                        for (int jk = 0; jk <= nodecount; jk++) {
+                            if (jk != id) {
+                                String pair = String.valueOf(id) + "," + String.valueOf(jk);
+                                int distance = 0;
+                                for (Map.Entry<String, Integer> entry2 : root.entrySet()) {
+                                    if (pair.equalsIgnoreCase(entry2.getKey())) {
+                                        distance = entry2.getValue();
+                                    }
 
-                    for (int jk = 0; jk <= nodecount; jk++) {
-                        if (jk != id) {
-                            String pair = String.valueOf(id) + "," + String.valueOf(jk);
-                            int distance = 0;
-                            for (Map.Entry<String, Integer> entry2 : root.entrySet()) {
-                                if (pair.equalsIgnoreCase(entry2.getKey())) {
-                                    distance = entry2.getValue();
                                 }
-
+                                rep.put(pair, distance);
                             }
-                            rep.put(pair, distance);
                         }
                     }
                 }
             }
-        }
+            //String sql = "insert into fileplaceing (id,location,replacing)values('" + fid + "','" + placeing + "','" + replaceing + "')";
+            filePlacementDAO.insertFilePlacement(new FilePlacing(fid + "", placeing + "", replaceing + ""));
 
-        //String sql = "insert into fileplaceing (id,location,replacing)values('" + fid + "','" + placeing + "','" + replaceing + "')";
-        PreparedStatement st = con.prepareStatement(Queries.INSERT_FILEPLACING);
-        //int size, int fid,String placeing = "";String replaceing = "";
-        st.setInt(1, fid);
-        st.setString(2,placeing);
-        st.setString(3,replaceing);
-        st.executeUpdate();
+        } catch (ODRDataAccessException ex) {
+            Logger.getLogger(Centrality.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
     static int h = 0;

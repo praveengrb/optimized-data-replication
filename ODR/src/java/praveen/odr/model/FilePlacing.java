@@ -14,6 +14,15 @@ public class FilePlacing {
     private String location;
     private String replacing;
 
+    public FilePlacing() {
+    }
+
+    public FilePlacing(String id, String location, String replacing) {
+        this.id = id;
+        this.location = location;
+        this.replacing = replacing;
+    }
+
     public String getId() {
         return id;
     }

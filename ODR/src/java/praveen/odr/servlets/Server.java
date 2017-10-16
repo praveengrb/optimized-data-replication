@@ -22,6 +22,7 @@ import praveen.odr.business.LocationManager;
 
 import praveen.odr.constants.Constants;
 import praveen.odr.exception.ODRDataAccessException;
+import praveen.odr.model.ServerNode;
 
 /**
  *
@@ -66,9 +67,7 @@ public class Server extends HttpServlet {
 
                 }
             }
-            //String sql = "insert into servernode (dis,capacity,color)values('" + disf + "','" + capa + "','" + color
-            //		+ "')";
-            locationManager.createServer(disf, capa, color);
+            locationManager.createServer(new ServerNode(disf+"",capa+"",color));
             response.sendRedirect("server.jsp");
         } catch (ODRDataAccessException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);

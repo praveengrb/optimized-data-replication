@@ -10,10 +10,21 @@ package praveen.odr.model;
  * @author Praveen
  */
 public class ServerNode {
+
     private int id;
     private String dist;
     private String capacity;
-    private String code;
+    private String color;
+
+    public ServerNode() {
+        super();
+    }
+
+    public ServerNode(String dist, String capacity, String color) {
+        this.dist = dist;
+        this.capacity = capacity;
+        this.color = color;
+    }
 
     public int getId() {
         return id;
@@ -39,11 +50,11 @@ public class ServerNode {
         this.capacity = capacity;
     }
 
-    public String getCode() {
-        return code;
+    public String getColor() {
+        return color;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setColor(String color) {
+        this.color = color;
     }
 }
