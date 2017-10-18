@@ -8,6 +8,7 @@ package praveen.odr.business;
 import praveen.odr.dao.UniqueFileManagerDAO;
 import praveen.odr.dao.impl.UniqueFileManagerDAOImpl;
 import praveen.odr.exception.ODRDataAccessException;
+import praveen.odr.model.UFile;
 
 /**
  *
@@ -17,15 +18,13 @@ public class UniqueFileManager {
 
     UniqueFileManagerDAO uniqueDAO = new UniqueFileManagerDAOImpl();
 
-    public void insertUniqueFile(String uniqueId, String name, String description, String fileName) throws ODRDataAccessException {
-        uniqueDAO.insertUniqueFile(uniqueId, name, description, fileName);
+    public void insertUniqueFile(UFile ufile) throws ODRDataAccessException {
+        uniqueDAO.insertUniqueFile(ufile);
     }
 
     public int getLUID() throws ODRDataAccessException{
         return uniqueDAO.getLUID();
     }
     
-    public void updateFilePlacing(String placing,String replacing, String id)throws ODRDataAccessException{
-         uniqueDAO.updateFilePlacing(placing,replacing,id);
-    }
+ 
 }

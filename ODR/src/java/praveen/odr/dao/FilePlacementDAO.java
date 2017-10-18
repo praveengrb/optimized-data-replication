@@ -14,4 +14,6 @@ import praveen.odr.model.FilePlacing;
  */
 public interface FilePlacementDAO {
      public void insertFilePlacement(FilePlacing filePlacement) throws ODRDataAccessException;
+     public FilePlacing getFilePlacedById(String id)throws ODRDataAccessException;
+     public void updateFilePlacing(FilePlacing filePlacing) throws ODRDataAccessException;
 }

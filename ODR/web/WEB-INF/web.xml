@@ -2,7 +2,7 @@
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     <servlet>
         <servlet-name>download</servlet-name>
-        <servlet-class>praveen.odr.servlets.Download</servlet-class>
+        <servlet-class>praveen.odr.servlets.FileDownload</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>download</servlet-name>
@@ -10,7 +10,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>login1</servlet-name>
-        <servlet-class>praveen.odr.servlets.Login</servlet-class>
+        <servlet-class>praveen.odr.servlets.UserLogin</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>login1</servlet-name>
@@ -18,7 +18,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>register</servlet-name>
-        <servlet-class>praveen.odr.servlets.Register</servlet-class>
+        <servlet-class>praveen.odr.servlets.UserRegistration</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
@@ -34,7 +34,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>upload</servlet-name>
-        <servlet-class>praveen.odr.servlets.Upload</servlet-class>
+        <servlet-class>praveen.odr.servlets.FileUpload</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>upload</servlet-name>

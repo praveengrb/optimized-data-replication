@@ -10,6 +10,10 @@ public class User {
     String emailAddress;
     String password;    
     boolean admin;
+
+    public User() {
+        super();
+    }
     public void setId(int id){
         this.id=id;
     }
@@ -26,6 +30,12 @@ public class User {
     
     public void setName(String name){
         this.name = name;
+    }
+
+    public User(String name, String emailAddress, String password) {
+        this.name = name;
+        this.emailAddress = emailAddress;
+        this.password = password;
     }
     
     public String getName (){

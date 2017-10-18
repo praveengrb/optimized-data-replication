@@ -27,8 +27,8 @@ import praveen.odr.model.User;
  * @author Praveen Sankarasubramanian
  */
 @WebServlet(urlPatterns = {"/login1"})
-public class Login extends HttpServlet {
-
+public class UserLogin extends HttpServlet {
+ UserManagement userManagement = new UserManagement();
     /**
 	 * 
 	 */
@@ -52,7 +52,7 @@ public class Login extends HttpServlet {
         String pass = request.getParameter("pass");
         /* TODO output your page here. You may use following sample code. */
         try {
-            UserManagement userManagement = new UserManagement();
+           
             User user = new User();
             user.setEmailAddress(eid);
             user.setPassword(pass);
@@ -75,7 +75,7 @@ public class Login extends HttpServlet {
 
             }
         }   catch (ODRDataAccessException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserLogin.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
             out.close();
         }
@@ -96,7 +96,7 @@ public class Login extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -114,7 +114,7 @@ public class Login extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

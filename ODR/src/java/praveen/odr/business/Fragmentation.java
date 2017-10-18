@@ -124,7 +124,7 @@ public class Fragmentation {
             IvParameterSpec iv = new IvParameterSpec(ivBytes);
 
             // Encrypt the plaintext, then zero it out
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance(Constants.CIPHER);
             cipher.init(Cipher.ENCRYPT_MODE, aesKey, iv);
             encryptedBuf = cipher.doFinal(buf);
 
@@ -168,7 +168,7 @@ public class Fragmentation {
             IvParameterSpec iv = new IvParameterSpec(ivBytes);
 
             // Encrypt the plaintext, then zero it out
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance(Constants.CIPHER);
             cipher.init(Cipher.ENCRYPT_MODE, aesKey, iv);
             encryptedBuf = cipher.doFinal(buf);
             java.util.Arrays.fill(buf, (byte) 0);
@@ -195,10 +195,10 @@ public class Fragmentation {
             throws IOException, NtruException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         ArrayList<String> lo = new ArrayList<>();
 
-        Connection con= new ConnectionManagerDAOImpl().getConnection();
+        Connection con = new ConnectionManagerDAOImpl().getConnection();
         //String sa = "select * from fileplaceing where id='" + id + "'";
         PreparedStatement pr = con.prepareStatement(Queries.SELECT_FILEPLACING_ID);
-        pr.setString(1,id+"");
+        pr.setString(1, id + "");
         ResultSet rs = pr.executeQuery();
         String kk = "";
         String decrypted = "";
@@ -212,17 +212,13 @@ public class Fragmentation {
 
         }
         int count = 0;
-        String pubkeyFile = "public_Key";
-        String privkeyFile = "private_Key";
         Random prng = createSeededRandom(id);
         X982Drbg j = RandomExtractor.extractRNG(prng);
         System.out.println(j);
         CHUNK_SIZE = 0;
         OID oid = parseOIDName("ees1499ep1");
         Random1 = prng;
-
-        System.out.println(Random1);
-        NtruEncryptKey ntruKeys = setupNtruEncryptKey(Random1, oid, pubkeyFile, privkeyFile);
+        NtruEncryptKey ntruKeys = setupNtruEncryptKey(Random1, oid, Constants.PUBLIC_KEY, Constants.PRIVATE_KEY);
         // log ("File Is Reading "+ SourceFileName );
         File willBeRead = new File(SourceFileName);
         int FILE_SIZE = (int) willBeRead.length();
@@ -267,40 +263,33 @@ public class Fragmentation {
 
                 encryptMessage(ntruKeys, prng, msg, id, count);
                 System.out.println("Encrypted: " + new String(encryptedBuf));
-                String server = (String) lo.get(count);
-                String partFileName = Constants.FRAGMENT_SERVER_LOCATION
-                        .replaceAll(Constants.LOCATION, server)
-                        .replaceAll(Constants.PART, PART_NAME);
-                //"F:/Project/ODR/Project/ODR/web/Server/" + server + "/" + PART_NAME
-                try (FileOutputStream fos = new FileOutputStream(partFileName
-                )) {
-                    fos.write(encryptedBuf);
+                //
+                if (count < lo.size()) {
+                    String server = (String) lo.get(count);
+                    String partFileName = Constants.FRAGMENT_SERVER_LOCATION
+                            .replaceAll(Constants.LOCATION, server)
+                            .replaceAll(Constants.PART, PART_NAME);
+                    //"F:/Project/ODR/Project/ODR/web/Server/" + server + "/" + PART_NAME
+                    try (FileOutputStream fos = new FileOutputStream(partFileName
+                    )) {
+                        fos.write(encryptedBuf);
+                    }
+                    nameList.add(server);
+                    System.out.println("Total Bytes Read: " + totalBytesRead);
+
+                    Path encryptedPartFile = Paths.get(partFileName);
+                    encryptedBuf = Files.readAllBytes(encryptedPartFile);
+                    System.out.println(new String(encryptedBuf));
+                    // decryption:
+                    Path keyFile = Paths.get(Constants.KEY_FILE_LOCATION + id + Constants.TXT_FILE_EXTENSION);
+                    byte[] data = Files.readAllBytes(keyFile);
+                    System.out.println(new String(data));
+                    OID oid1 = parseOIDName("ees1499ep1");
+                    Random prng1 = new Random(data);
+                    NtruEncryptKey ntruKeys1 = setupNtruEncryptKey(prng1, oid1, Constants.PUBLIC_KEY, Constants.PRIVATE_KEY);
+                    String k1 = decryptMessage(ntruKeys1, new String(encryptedBuf), id, count, server);
+                    System.out.println("Decrypted: " + k1);
                 }
-
-                nameList.add(server);
-                System.out.println("Total Bytes Read: " + totalBytesRead);
-
-                // decryption:
-                Path path1 = Paths.get(Constants.KEY_FILE_LOCATION + id + Constants.TXT_FILE_EXTENSION);
-                byte[] data = Files.readAllBytes(path1);
-                System.out.println(new String(data));
-
-                Path path3 = Paths.get(partFileName);
-                encryptedBuf = Files.readAllBytes(path3);
-
-                System.out.println(new String(encryptedBuf));
-
-                String pubkeyFile1 = "public_Key";
-                String privkeyFile1 = "private_Key";
-
-                OID oid1 = parseOIDName("ees1499ep1");
-
-                Random prng1 = new Random(data);
-
-                NtruEncryptKey ntruKeys1 = setupNtruEncryptKey(prng1, oid1, pubkeyFile1, privkeyFile1);
-
-                String k1 = decryptMessage(ntruKeys1, new String(encryptedBuf), id, count, server);
-                System.out.println("Decrypted: " + k1);
 
                 count = count + 1;
 
@@ -340,7 +329,7 @@ public class Fragmentation {
 
             // Decrypt the file contents
             IvParameterSpec iv = new IvParameterSpec(ivBytes);
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance(Constants.CIPHER);
             cipher.init(Cipher.DECRYPT_MODE, aesKey, iv);
             fileContents = cipher.doFinal(encFileContents);
         } catch (java.security.GeneralSecurityException e) {
@@ -356,7 +345,7 @@ public class Fragmentation {
         Connection con = new ConnectionManagerDAOImpl().getConnection();
         //String sa = "select * from fileplaceing where id='" + id + "'";
         PreparedStatement pr = con.prepareStatement(Queries.SELECT_FILEPLACING_ID);
-        pr.setString(1, id+"");
+        pr.setString(1, id + "");
         ResultSet rs = pr.executeQuery();
 
         String kk = "";
@@ -370,8 +359,8 @@ public class Fragmentation {
             lo.add(k);
         }
         int count = 0;
-        String pubkeyFile = "public_Key";
-        String privkeyFile = "private_Key";
+        
+        
         Random prng = createSeededRandom1(id);
         X982Drbg j = RandomExtractor.extractRNG(prng);
         System.out.println(j);
@@ -380,7 +369,7 @@ public class Fragmentation {
         Random1 = prng;
 
         System.out.println(Random1);
-        NtruEncryptKey ntruKeys = setupNtruEncryptKey(Random1, oid, pubkeyFile, privkeyFile);
+        NtruEncryptKey ntruKeys = setupNtruEncryptKey(Random1, oid, Constants.PUBLIC_KEY, Constants.PRIVATE_KEY);
         // log ("File Is Reading "+ SourceFileName );
         File willBeRead = new File(SourceFileName);
         int FILE_SIZE = (int) willBeRead.length();
@@ -422,19 +411,20 @@ public class Fragmentation {
                 String msg = new String(temporary);
 
                 encryptMessage1(ntruKeys, prng, msg, id);
-                System.out.println("Encrypted: " + new String(encryptedBuf));
-                String server = (String) lo.get(count);
-                String partFileName = Constants.FRAGMENT_SERVER_LOCATION
-                        .replaceAll(Constants.LOCATION, server)
-                        .replaceAll(Constants.PART, PART_NAME);
-                try (FileOutputStream fos = new FileOutputStream(
-                        partFileName)) {
-                    fos.write(encryptedBuf);
+                System.out.println("Encrypted: " + new String(encryptedBuf)); //range
+                if (count < lo.size()) {
+                    String server = (String) lo.get(count);
+                    String partFileName = Constants.FRAGMENT_SERVER_LOCATION
+                            .replaceAll(Constants.LOCATION, server)
+                            .replaceAll(Constants.PART, PART_NAME);
+                    try (FileOutputStream fos = new FileOutputStream(
+                            partFileName)) {
+                        fos.write(encryptedBuf);
+                    }
+
+                    nameList.add(server);
+                    System.out.println("Total Bytes Read: " + totalBytesRead);
                 }
-
-                nameList.add(server);
-                System.out.println("Total Bytes Read: " + totalBytesRead);
-
                 count = count + 1;
 
             }

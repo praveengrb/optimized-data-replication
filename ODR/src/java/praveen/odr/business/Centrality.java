@@ -5,6 +5,7 @@
  */
 package praveen.odr.business;
 
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -48,7 +49,7 @@ public class Centrality {
     public static int centr = 0;
     public static int read = 0;
     public static int write = 0;
-    public static int nodecount = 0;
+   // public static int nodecount = 0;
     public static int totlanumberofsp = 0;
     public static HashMap<String, Integer> root = new HashMap<>();
     public static HashMap<String, String> vall = new HashMap<>();
@@ -62,20 +63,20 @@ public class Centrality {
 
     public static ArrayList<Integer> segment = new ArrayList<>();
 
-    public static void fragmentation(int size, int fid) throws ClassNotFoundException, SQLException, IOException, InstantiationException, IllegalAccessException {
-
+    public static void fragmentation(int size, int fid)  {
+    int nodecount = 0;
         try {
 
             // write new line
             List<?> pla = new ArrayList<>();
-            Map<String, Integer> result = new HashMap<>();
+            Map<String, Integer> nodeAndCapacity = new HashMap<>();
             List<ServerNode> serverNodes = managerDAO.getLocations();
             for (ServerNode serverNode:serverNodes) {
                // String jj = rs.getString(2);
-                result.put(serverNode.getId()+"", Integer.parseInt(serverNode.getCapacity()));
+                nodeAndCapacity.put(serverNode.getId()+"", Integer.parseInt(serverNode.getCapacity()));
                 nodecount = nodecount + 1;
             }
-            List<Entry<String, Integer>> list = sortByValueInDecreasingOrder(result);
+            List<Entry<String, Integer>> list = sortByValueInDecreasingOrder(nodeAndCapacity);
             int i = 0;
             PrintWriter writer1 = new PrintWriter(Constants.FRAGMENT_FILE_LOCATION);//F://Project
             writer1.print("");
@@ -89,26 +90,26 @@ public class Centrality {
                 writer.write("\r\n");
                 writer.write("\r\n");
                 for (Map.Entry<String, Integer> entry1 : list) {
-                    String gg = (String) entry1.getKey();
-                    String gg1 = String.valueOf(entry1.getValue());
+                    String nodeId = (String) entry1.getKey();
+                    String capacity = String.valueOf(entry1.getValue());
 
                     i = i + 1;
-                    String so = "0," + gg;
-                    String so1 = gg + ",1";
-                    root.put(so, Integer.parseInt(gg1));
-                    root.put(so1, Integer.parseInt(gg1));
-                    System.out.println(so + " ========= " + gg1);
-                    //System.out.println(gg+"   ============================    "+gg1);
+                    String so = "0," + nodeId;
+                    String so1 = nodeId + ",1";
+                    root.put(so, Integer.parseInt(capacity));
+                    root.put(so1, Integer.parseInt(capacity));
+                    System.out.println(so + " ========= " + capacity);
+                    //System.out.println(nodeId+"   ============================    "+capacity);
                     int j = 0;
                     for (Map.Entry<String, Integer> entry2 : list) {
                         j = j + 1;
 
                         String g = (String) entry2.getKey();
                         String g1 = String.valueOf(entry2.getValue());
-                        if (gg == null ? g != null : !gg.equals(g)) {
-                            String pair = gg + "," + g;
+                        if (nodeId == null ? g != null : !nodeId.equals(g)) {
+                            String pair = nodeId + "," + g;
 
-                            int k = Integer.parseInt(gg1);
+                            int k = Integer.parseInt(capacity);
 
                             int k1 = Integer.parseInt(g1);
                             int distance = 0;
@@ -118,9 +119,9 @@ public class Centrality {
                                 distance = k1 - k;
                             }
                             root.put(pair, distance);
-                            writer.write(gg + " " + g + " " + distance);
+                            writer.write(nodeId + " " + g + " " + distance);
                             writer.write("\r\n");
-                            vall.put(gg, g);
+                            vall.put(nodeId, g);
                             System.out.println(pair + " ========= " + distance);
 
                         }
@@ -277,7 +278,7 @@ public class Centrality {
             //String sql = "insert into fileplaceing (id,location,replacing)values('" + fid + "','" + placeing + "','" + replaceing + "')";
             filePlacementDAO.insertFilePlacement(new FilePlacing(fid + "", placeing + "", replaceing + ""));
 
-        } catch (ODRDataAccessException ex) {
+        } catch (ODRDataAccessException | FileNotFoundException ex) {
             Logger.getLogger(Centrality.class.getName()).log(Level.SEVERE, null, ex);
         }
 

@@ -15,6 +15,7 @@ public class FilePlacing {
     private String replacing;
 
     public FilePlacing() {
+        super();
     }
 
     public FilePlacing(String id, String location, String replacing) {

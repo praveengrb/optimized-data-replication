@@ -19,9 +19,9 @@ import praveen.odr.model.User;
  * @author Praveen
  */
 public class UserManagement {
-    private UserManagementDAO<User> userManagementDAO = new UserManagementDAOImpl();
+    private final UserManagementDAO<User> userManagementDAO = new UserManagementDAOImpl();
     public Status<User> registerUser(User user){
-        Status<User> status = new Status<User>(false,Constants.SUCCESS);
+        Status<User> status = new Status<>(false,Constants.SUCCESS);
         try {
             userManagementDAO.registerUser(user);
         } catch (ODRDataAccessException ex) {

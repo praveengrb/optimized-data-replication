@@ -15,11 +15,24 @@ public class ServerNode {
     private String dist;
     private String capacity;
     private String color;
+    private String nodeName;
 
+    public String getNodeName() {
+        return nodeName;
+    }
+
+    public void setNodeName(String nodeName) {
+        this.nodeName = nodeName;
+    }
     public ServerNode() {
         super();
     }
-
+    public ServerNode(String dist, String capacity, String color,String nodeName) {
+        this.dist = dist;
+        this.capacity = capacity;
+        this.color = color;
+        this.nodeName = nodeName;
+    }
     public ServerNode(String dist, String capacity, String color) {
         this.dist = dist;
         this.capacity = capacity;

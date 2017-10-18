@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import praveen.odr.constants.Queries;
 import praveen.odr.dao.UniqueFileManagerDAO;
 import praveen.odr.exception.ODRDataAccessException;
+import praveen.odr.model.UFile;
 
 /**
  *
@@ -23,13 +24,13 @@ import praveen.odr.exception.ODRDataAccessException;
 public class UniqueFileManagerDAOImpl implements UniqueFileManagerDAO {
 
     @Override
-    public void insertUniqueFile(String uniqueId, String name, String description, String fileName) throws ODRDataAccessException {
+    public void insertUniqueFile(UFile ufile) throws ODRDataAccessException {
         try (Connection con = new ConnectionManagerDAOImpl().getConnection()) {
             PreparedStatement st = con.prepareStatement(Queries.INSERT_UNIQUEFILE);
-            st.setString(1, uniqueId);
-            st.setString(2, name);
-            st.setString(3, description);
-            st.setObject(4, fileName);
+            st.setString(1, ufile.getUid());
+            st.setString(2, ufile.getFname());
+            st.setString(3, ufile.getDescription());
+            st.setObject(4, ufile.getFile());
             st.executeUpdate();
         } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
             Logger.getLogger(UniqueFileManagerDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -53,21 +54,4 @@ public class UniqueFileManagerDAOImpl implements UniqueFileManagerDAO {
         return id;
     }
 
-    @Override
-    public void updateFilePlacing(String placing, String replacing, String id) throws ODRDataAccessException {
-        try (Connection con = new ConnectionManagerDAOImpl().getConnection()) {
-            PreparedStatement preparedStmt = con.prepareStatement(Queries.UPDATE_FILEPLACING_BYID);
-            preparedStmt.setString(1, placing);
-            preparedStmt.setString(2, replacing);
-            preparedStmt.setString(3, id);
-            preparedStmt.executeUpdate();
-        } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
-            Logger.getLogger(UniqueFileManagerDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ODRDataAccessException(ex.getMessage(), ex.getCause());
-        }
-
-    }
-    
-    
-    
 }

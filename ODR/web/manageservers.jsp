@@ -30,7 +30,7 @@
                 font-family: 'Kurale';font-size: 35px;
             }
             body{
-                background-image: url("img/wall.jpg") ;
+                background-image: url("https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/images/wall.jpg") ;
             }
             .btn-primary{
                 background: #101010;
@@ -89,8 +89,8 @@
                         <nav class="main-navigation pull-right">
                             <button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
                             <ul class="menu">
-                                <li class="menu-item"><a href="server.jsp">Adding Server</a></li>
-                                <li class="menu-item"><a href="view.jsp">View cloud server details</a></li>
+                                <li class="menu-item"><a href="server.jsp">Adding Server</a>
+                                <li class="menu-item"><a href="view.jsp">Manage Nodes</a></li>
                                 <li class="menu-item"><a href="index.html">Logout</a></li>
                             </ul>
                         </nav> <!-- .main-navigation -->
@@ -109,23 +109,10 @@
                                     <small class="slide-subtitle">Optimized Data Replication </small>
                                     <div class="slide-summary">
                                         <p>Optimized Data Replication utilizes the concept of data fragmentation for securing the user data within the cluster. To further enhance the security, the fragments are not stored on the adjacent nodes. To separate the storage of fragments by a certain distance, the concept of T-coloring is used. To improve the retrieval time of fragments, the fragments is stored in the most central nodes.</p>		</div>
-                                    <a href="" class="button">Read More</a>
+                                    
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="container">
-                                <img src="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/images/server.jpg" alt="">
-                                <div class="slide-caption">
-                                    <h2 class="slide-title">Data Security</h2>
-                                    <small class="slide-subtitle">NTRU Encryption</small>
-                                    <div class="slide-summary">
-                                        <p>The files are divided into encrypted fragments and replicated across nodes in the cluster. Each node stores a fragment of a data file and it ensures that in case of successful attacks, no meaningful information is revealed to the hacker. The nodes storing fragments are separated by a certain distance. This prohibits the attacker from guessing the location of the fragments. To handle the download request from the user, a manager collects all the fragments from the nodes and re-assembles them into a single file. Using the decryption algorithms like NTRU the file is decrypted and the file is sent to the user  </p>	</div>
-                                    <a href="" class="button">Read More</a>
-                                </div>
-                            </div>
-                        </li>
-
                     </ul> <!-- .slides -->
                 </div> <!-- .slider -->
             </main>
@@ -134,8 +121,7 @@
                 <thead>
                     <tr>
                         <th>Location Id</th>
-                        <th>Distance</th>
-                        <th>Capacity</th>
+                        <th>Name of the Node</th>                    
                         <th>T-Color</th>
 
                     </tr>
@@ -144,18 +130,11 @@
 
                     <%
 
-                        try {
-                            LocationManager locationsManager = new LocationManager();
-                            List<ServerNode> serverNodes=locationsManager.getLocations();
-                            //Connection con = new ConnectionManagerDAOImpl().getConnection();
-                            //String sa = Queries.SELECT_SERVERNODE;
-                            //PreparedStatement pr = con.prepareStatement(sa);
-                            //ResultSet rs = pr.executeQuery();
-
-
+                        try {              
+                            List<ServerNode> serverNodes = new LocationManager().getLocations();
                     %>
 
-                    <%             for (ServerNode serverNode:serverNodes) {
+                    <%             for (ServerNode serverNode : serverNodes) {
                             System.out.println(serverNode.getId());
                     %>
                     <tr>
@@ -164,9 +143,7 @@
 
                         <td align="center"><%= serverNode.getId()%></td>
 
-                        <td align="center"><%= serverNode.getDist() %></td>
-
-                        <td align="center"><%= serverNode.getCapacity() %></td>
+                        <td align="center"><%= serverNode.getNodeName()%></td>          
 
                         <td align="center"><%= serverNode.getColor()%></td>
 
@@ -224,8 +201,9 @@
 
         </div> <!-- #site-content -->
        	<script src="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/js/jquery-1.11.1.min.js"></script>
-		<script src="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/js/plugins.js"></script>
-		<script src="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/js/app.js"></script>
+        <script src="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/js/plugins.js"></script>
+        <script src="https://s3.ap-south-1.amazonaws.com/praveen.odr.static.files/js/app.js"></script>
+
     </body>
 
 </html>

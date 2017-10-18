@@ -176,7 +176,7 @@ public class NTRUEncryptTest {
             IvParameterSpec iv = new IvParameterSpec(ivBytes);
 
             // Encrypt the plaintext, then zero it out
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance(Constants.CIPHER);
             cipher.init(Cipher.ENCRYPT_MODE, aesKey, iv);
             encryptedBuf = cipher.doFinal(buf);
             java.util.Arrays.fill(buf, (byte) 0);
@@ -220,7 +220,7 @@ public class NTRUEncryptTest {
 
             // Decrypt the file contents
             IvParameterSpec iv = new IvParameterSpec(ivBytes1);
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance(Constants.CIPHER);
             cipher.init(Cipher.DECRYPT_MODE, aesKey, iv);
             fileContents = cipher.doFinal(encFileContents);
         } catch (java.security.GeneralSecurityException e) {

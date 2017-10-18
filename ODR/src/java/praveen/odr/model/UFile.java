@@ -52,6 +52,22 @@ public class UFile {
         return file;
     }
 
+    public UFile() {
+        super();
+    }
+
+    public UFile(String uid, String fname,String description, String file) {
+        this.uid = uid;
+        this.fname = fname;
+        this.uid = uid;
+        this.description = description;
+        this.file = file;
+    }
+    
+    
+
+
+
     public void setFile(String file) {
         this.file = file;
     }

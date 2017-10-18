@@ -31,6 +31,7 @@ import praveen.odr.model.ServerNode;
 @WebServlet(urlPatterns = {"/server1"})
 public class Server extends HttpServlet {
 
+    LocationManager locationManager = new LocationManager();
     /**
      *
      */
@@ -50,25 +51,25 @@ public class Server extends HttpServlet {
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String dis = request.getParameter("dis");
-        String cap = request.getParameter("cap");
-
+        String nodeName = request.getParameter("nodeName");
+        String nodeColor = request.getParameter("nodeColor");
         try {
-            LocationManager locationManager = new LocationManager();
             int id = locationManager.getLocation();
             Random randomGenerator = new Random();
             int randomInt = randomGenerator.nextInt(100);
-            int disf = Integer.parseInt(dis) + randomInt;
-            int capa = Integer.parseInt(cap) + randomInt;
-            String color = "open color";
+            int disf = 80;
+            int capa = 100;
             File file = new File(Constants.FRAGMENT_SERVER_PATH + id);
             if (!file.exists()) {
                 if (file.mkdir()) {
 
                 }
             }
-            locationManager.createServer(new ServerNode(disf+"",capa+"",color));
+            //nodeColor = (nodeColor==null || nodeName.isEmpty() || nodeName.equalsIgnoreCase("")) Constants.OPEN_COLOR;
+            locationManager.createServer(new ServerNode(disf + "", capa + "", nodeColor,nodeName));
             response.sendRedirect("server.jsp");
+            //}
+
         } catch (ODRDataAccessException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         } finally {

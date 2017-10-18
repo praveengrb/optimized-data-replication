@@ -6,15 +6,16 @@
 package praveen.odr.dao;
 
 import praveen.odr.exception.ODRDataAccessException;
+import praveen.odr.model.UFile;
 
 /**
  *
  * @author Praveen
  */
 public interface UniqueFileManagerDAO {
-     public void insertUniqueFile(String uniqueId,String name,String description,String fileName) throws ODRDataAccessException;
+     public void insertUniqueFile(UFile ufile) throws ODRDataAccessException;
 
     public int getLUID()throws ODRDataAccessException;
 
-    public void updateFilePlacing(String placing, String replacing, String id) throws ODRDataAccessException;
+    
 }

@@ -26,8 +26,8 @@ import praveen.odr.model.User;
  * @author Praveen Sankarasubramanian
  */
 @WebServlet(urlPatterns = {"/register"})
-public class Register extends HttpServlet {
-
+public class UserRegistration extends HttpServlet {
+    UserManagement userManagement = new UserManagement();
     /**
      *
      */
@@ -52,11 +52,7 @@ public class Register extends HttpServlet {
         String pass = request.getParameter("pass");
 
         try {
-            User user = new User();
-            user.setName(name);
-            user.setEmailAddress(eid);
-            user.setPassword(pass);
-            UserManagement userManagement = new UserManagement();
+            User user = new User(name,eid,pass);
             if (userManagement.isUserExists(user)) {
                 request.setAttribute("mess", "Email Id already Existed");
                 RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
@@ -67,7 +63,7 @@ public class Register extends HttpServlet {
             }
 
         } catch (ODRDataAccessException ex) {
-            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserRegistration.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             out.close();
         }
@@ -88,7 +84,7 @@ public class Register extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserRegistration.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -106,7 +102,7 @@ public class Register extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserRegistration.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

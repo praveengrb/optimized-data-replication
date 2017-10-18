@@ -25,11 +25,11 @@ public class Queries {
 
     public static final String INSERT_FILEPLACING = "insert into fileplaceing (id,location,replacing)values(?,?,?)";
 
-    public static final String SELECT_FILEPLACING_ID = "select * from fileplaceing where id=?";
+    public static final String SELECT_FILEPLACING_ID = "select id,location,replacing from fileplaceing where id=?";
     
     public static String SERVERNODE_ID = "SELECT id FROM servernode";
     
-    public static String INSERT_SERVERNODE = "insert into servernode (dis,capacity,color)values(?,?,?)";
+    public static String INSERT_SERVERNODE = "insert into servernode (dis,capacity,color,node_name)values(?,?,?,?)";
     
     public static String INSERT_UNIQUEFILE = "insert into ufile (uid,fname,des,file)values(?,?,?,?)"; 
    

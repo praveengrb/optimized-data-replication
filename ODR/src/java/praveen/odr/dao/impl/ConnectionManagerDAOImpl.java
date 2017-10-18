@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import praveen.odr.constants.Constants;
-import praveen.odr.servlets.Register;
+import praveen.odr.servlets.UserRegistration;
 
 /**
  *
@@ -27,11 +27,11 @@ public class ConnectionManagerDAOImpl implements ConnectionManagerDAO {
             try {
                 Class.forName(Constants.DRIVER_NAME).newInstance();
             } catch (InstantiationException | IllegalAccessException ex) {
-                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserRegistration.class.getName()).log(Level.SEVERE, null, ex);
                 throw ex;
             }
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserRegistration.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
         }
         try {

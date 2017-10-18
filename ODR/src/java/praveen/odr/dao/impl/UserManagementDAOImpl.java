@@ -27,7 +27,7 @@ public class UserManagementDAOImpl implements UserManagementDAO<User> {
     ConnectionManagerDAOImpl connectionManager = new ConnectionManagerDAOImpl();
     @Override
     public Status<User> isUserExists(User user) throws ODRDataAccessException {
-        Status<User> status = new Status(true, Constants.SUCCESS);
+        Status<User> status = new Status(false, Constants.FAILED);
         try (Connection con = connectionManager.getConnection()) {           
             PreparedStatement pr = con.prepareStatement(Queries.SELECT_USER_BY_EMAIL);
             pr.setString(1, user.getEmailAddress());
@@ -57,7 +57,7 @@ public class UserManagementDAOImpl implements UserManagementDAO<User> {
     
    @Override
     public Status<User> isValidUser(User user) throws ODRDataAccessException {
-        Status<User> status = new Status(true, Constants.SUCCESS);
+        Status<User> status = new Status(false, Constants.FAILED);
         try (Connection con = connectionManager.getConnection()) {
             PreparedStatement pr = con.prepareStatement(Queries.SELECT_USER_BY_CREDENTIALS);
             pr.setString(1, user.getEmailAddress());

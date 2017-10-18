@@ -48,6 +48,7 @@ public class LocationManagerDAOImpl implements LocationManagerDAO {
             st1.setString(1, node.getDist());
             st1.setString(2, node.getCapacity());
             st1.setString(3, node.getColor());
+             st1.setString(4, node.getNodeName());
             st1.executeUpdate();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException ex) {
             Logger.getLogger(LocationManagerDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -105,6 +106,7 @@ public class LocationManagerDAOImpl implements LocationManagerDAO {
                 serverNode.setColor(rs1.getString("color"));
                 serverNode.setDist(rs1.getString("dis"));
                 serverNode.setCapacity(rs1.getString("capacity"));
+                serverNode.setNodeName(rs1.getString("node_name"));
                 //capacity = Integer.parseInt(rs1.getString(3));
                 serverNodes.add(serverNode);
             }

@@ -27,8 +27,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import praveen.odr.business.FilePlacingManager;
 import praveen.odr.business.UniqueFileManager;
 import praveen.odr.exception.ODRDataAccessException;
+import praveen.odr.model.FilePlacing;
+import praveen.odr.model.UFile;
 
 /**
  *
@@ -36,8 +39,10 @@ import praveen.odr.exception.ODRDataAccessException;
  */
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 50)
 @WebServlet(urlPatterns = {"/upload"})
-public class Upload extends HttpServlet {
+public class FileUpload extends HttpServlet {
 
+    static final Logger log = Logger.getLogger(FileUpload.class.getName());
+    UniqueFileManager uniqueFileManager = new UniqueFileManager();
     /**
      *
      */
@@ -74,76 +79,63 @@ public class Upload extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String name = request.getParameter("name");
-        String des = request.getParameter("des");
+        String description = request.getParameter("des");
         String webAppPath = getServletContext().getRealPath(File.separator);
-        String path = request.getParameter("myText");
-        String u = request.getParameter("userid");
-        String ll = path.length() < 2 ? path : path.substring(0, 2);
-        path = ll + Constants.FILE_BKP_LOCATION;// F://Project//ODR//Project//ODR
-
-        System.out.println(webAppPath);
+        String uniqueId = request.getParameter("userid");
         Part filePart = request.getPart("files");
-        String photo = "";
-        System.out.println(path);
-        File file = new File(path);
-        file.mkdir();
         String fileName = getFileName(filePart);
-
-        OutputStream out1 = null;
-        InputStream filecontent = null;
-        out1 = new FileOutputStream(new File(path + File.separator + fileName));
-        filecontent = filePart.getInputStream();
+        String backupLocation = Constants.FILE_BKP_LOCATION;
+        String backupFileName = Constants.FILE_BKP_LOCATION + fileName;
+        System.out.println(webAppPath);
+        //String photo = "";
+        System.out.println(backupLocation);
+        File file = new File(backupLocation);
+        file.mkdir();
+        //InputStream filecontent = null;
+        OutputStream backUpFileOPStream = new FileOutputStream(new File(backupFileName));
+        InputStream copyToBackupFile = filePart.getInputStream();
         int read = 0;
         final byte[] bytes = new byte[1024];
 
-        while ((read = filecontent.read(bytes)) != -1) {
-            out1.write(bytes, 0, read);
-            photo = path + fileName;
+        while ((read = copyToBackupFile.read(bytes)) != -1) {
+            backUpFileOPStream.write(bytes, 0, read);
+            //photo = backupLocation + fileName;
         }
 
         try {
-            String hh = ll + Constants.FILE_BKP_LOCATION + fileName;
-            UniqueFileManager uniqueFileManager = new UniqueFileManager();
-            uniqueFileManager.insertUniqueFile(u, name, des, hh);
-            int id = uniqueFileManager.getLUID();
-            ArrayList<String> nameList = null;
-            ArrayList<String> nameList1 = new ArrayList<>();
-            ArrayList<String> color = new ArrayList<>();
-            color.add("open color");
-            color.add("close color");
-            File willBeRead = new File(hh);
+            File willBeRead = new File(backupFileName);
             int FILE_SIZE = (int) willBeRead.length();
             System.out.println(FILE_SIZE);
             int filesize = 1;
             if (FILE_SIZE > 10) {
                 filesize = FILE_SIZE / 10;
             }
+            uniqueFileManager.insertUniqueFile(new UFile(uniqueId, name, description, backupFileName));
+            int fileId = uniqueFileManager.getLUID();
+            Centrality.fragmentation(15, fileId);
 
-            Centrality.fragmentation(15, id);
+            ArrayList<String> locationList = praveen.odr.business.Fragmentation.readAndFragment(backupFileName, filesize, fileId);
+            ArrayList<String> replacementList = praveen.odr.business.Fragmentation.readAndFragment1(backupFileName, filesize, fileId);
+            if (locationList != null && replacementList != null) {
+                String location = "";
+                String replacing = "";
+                for (int i = 0; i < locationList.size(); i++) {
+                    location = (locationList.size() - 1 == i)
+                            ? (location + locationList.get(i))
+                            : (location + locationList.get(i) + ",");
 
-            nameList = praveen.odr.business.Fragmentation.readAndFragment(hh, filesize, id);
-            String placeing = "";
-            String replaceing = "";
-            for (int i = 0; i < nameList.size(); i++) {
-                if (nameList.size() - 1 == i) {
-                    placeing = placeing + nameList.get(i);
-                } else {
-                    placeing = placeing + nameList.get(i) + ",";
                 }
 
-            }
-            nameList1 = praveen.odr.business.Fragmentation.readAndFragment1(hh, filesize, id);
-            for (int i = 0; i < nameList1.size(); i++) {
-                if (nameList1.size() - 1 == i) {
-                    replaceing = replaceing + nameList1.get(i);
-                } else {
-                    replaceing = replaceing + nameList1.get(i) + ",";
+                for (int i = 0; i < replacementList.size(); i++) {
+                    replacing = (replacementList.size() - 1 == i)
+                            ? (replacing + replacementList.get(i))
+                            : (replacing + replacementList.get(i) + ",");
                 }
-
+                //String fileId, String location, String replacing
+                new FilePlacingManager().updateFilePlacing(new FilePlacing(fileId + "", location, replacing));
             }
-            uniqueFileManager.updateFilePlacing(placeing, replaceing, id + "");
         } catch (ODRDataAccessException ex) {
-            Logger.getLogger(Upload.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FileUpload.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             out.close();
 
@@ -164,12 +156,10 @@ public class Upload extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         try {
             processRequest(request, response);
-
         } catch (NtruException | InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(Upload.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FileUpload.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -188,7 +178,7 @@ public class Upload extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NtruException | InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(Upload.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FileUpload.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
